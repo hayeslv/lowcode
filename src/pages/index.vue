@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { defineComponent } from "vue";
-import Foo from "~/components/Foo";
+import Foo from "~/components/Foo.vue";
 </script>
 
 <template>
