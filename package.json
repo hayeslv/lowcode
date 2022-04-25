@@ -11,6 +11,8 @@
   },
   "scripts": {
     "dev": "pnpm --dir packages/platform dev",
+    "build": "pnpm run build -r",
+    "stub": "pnpm run stub -r",
     "lint": "eslint .",
     "commit": "git add . && git cz",
     "prepare": "npx husky install"
@@ -24,12 +26,9 @@
     "conventional-changelog-cli": "^2.2.2",
     "cz-conventional-changelog-zh": "^0.0.2",
     "eslint": "^8.11.0",
+    "eslint-define-config": "^1.4.0",
     "husky": "^7.0.4",
-    "typescript": "^4.5.4"
-  },
-  "eslintConfig": {
-    "extends": "@hayeslv",
-    "ignorePatterns": ["auto-imports.d.ts"],
-    "rules": {}
+    "typescript": "^4.5.4",
+    "unbuild": "^0.7.4"
   }
 }

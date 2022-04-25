@@ -1,0 +1,26 @@
+{
+  "name": "@hayeslc/shared",
+  "private": true,
+  "version": "0.0.1",
+  "license": "MIT",
+  "author": "Hayes Lv <417703682@qq.com> (https://github.com/hayeslv/)",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "unbuild",
+    "stub": "unbuild --stub"
+  },
+  "devDependencies": {
+  },
+  "keywords": [],
+  "description": ""
+}

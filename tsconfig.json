@@ -1,19 +1,23 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
-    "target": "esnext",
-    "useDefineForClassFields": true,
     "module": "esnext",
-    "moduleResolution": "node",
+    "target": "esnext",
+    "resolveJsonModule": true, // 可以直接引入json
+    "moduleResolution": "node", // 模块查找方式--node模式
+    "baseUrl": ".",
+    "useDefineForClassFields": true,
     "strict": true,
     "jsx": "preserve",
     "sourceMap": true,
-    "resolveJsonModule": true,
     "esModuleInterop": true,
     "lib": ["esnext", "dom"],
     "paths": {
       "~/*": ["src/*"]
     }
   },
-  "exclude": ["dist", "node_modules"]
+  "include": [
+    "apps/**/src/**/*",
+    "packages/**/src/**/*",
+  ]
+  // "exclude": ["dist", "node_modules"]
 }
