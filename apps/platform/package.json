@@ -6,9 +6,10 @@
   "author": "Hayes Lv <417703682@qq.com> (https://github.com/hayeslv/)",
   "scripts": {
     "dev": "vite",
-    "build1": "vue-tsc --noEmit && vite build"
+    "build": "vite build"
   },
   "dependencies": {
+    "@hayeslc/shared": "workspace:^0.0.1",
     "vue": "^3.2.25",
     "vue-router": "^4.0.14"
   },

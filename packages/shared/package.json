@@ -1,7 +1,6 @@
 {
   "name": "@hayeslc/shared",
-  "private": true,
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "MIT",
   "author": "Hayes Lv <417703682@qq.com> (https://github.com/hayeslv/)",
   "main": "./dist/index.cjs",

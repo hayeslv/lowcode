@@ -10,9 +10,10 @@
     }
   },
   "scripts": {
-    "dev": "pnpm --dir packages/platform dev",
+    "dev": "pnpm --dir apps/platform dev",
     "build": "pnpm run build -r",
     "stub": "pnpm run stub -r",
+    "publish": "pnpm publish --filter '@hayeslc/*' --no-git-checks",
     "lint": "eslint .",
     "commit": "git add . && git cz",
     "prepare": "npx husky install"
