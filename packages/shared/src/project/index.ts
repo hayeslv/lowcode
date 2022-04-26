@@ -2,7 +2,6 @@
  * @Descripttion: 项目
  */
 
-import type { IMaterial } from "../material";
 import { uuid } from "../utils";
 
 export interface IProject {

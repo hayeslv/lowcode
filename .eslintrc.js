@@ -10,5 +10,6 @@ module.exports = defineConfig({
   extends: "@hayeslv",
   rules: {
     "@typescript-eslint/no-inferrable-types": "off",
+    "@typescript-eslint/no-var-requires": "off",
   },
 });
