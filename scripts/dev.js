@@ -2,9 +2,9 @@
  * @Descripttion: root运行子项目脚本
  */
 
-const execa = require("execa");
-const { resolve } = require("path");
-const inquirer = require("inquirer");
+import { execa } from "execa";
+import { resolve } from "path";
+import inquirer from "inquirer";
 
 const CWD = process.cwd();
 const PKG_PLATFORM = resolve(CWD, "./packages/platform");
@@ -21,11 +21,26 @@ async function create() {
       choices: [
         {
           key: "0",
-          name: "",
+          name: "lowcode平台",
+          value: "platform",
+        },
+        {
+          key: "1",
+          name: "node 服务",
+          value: "setvice",
         },
       ],
     },
   ]);
+
+  switch (project) {
+    case "platform":
+      run("npm", ["run", "dev"], { cwd: PKG_PLATFORM });
+      break;
+    case "service":
+      run("npm", ["run", "start"], { cwd: PKG_SETVICE });
+      break;
+  }
 }
 
 create();

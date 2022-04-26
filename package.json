@@ -9,8 +9,10 @@
       "path": "./node_modules/cz-conventional-changelog-zh"
     }
   },
+  "type": "module",
   "scripts": {
-    "dev": "pnpm --dir packages/platform dev",
+    "dev": "node scripts/dev.js",
+    "dev:platform": "pnpm --dir packages/platform dev",
     "build": "pnpm run build -r",
     "stub": "pnpm run stub -r",
     "publish": "pnpm publish --filter '@hayeslc/*' --no-git-checks",
