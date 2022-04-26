@@ -2,9 +2,16 @@ import { createApp } from "vue";
 import router from "./router";
 import App from "./App.vue";
 
-import { sum } from "@hayeslc/shared";
-console.log(sum(1, 2));
+import { setupElementPlus } from "./plugins/element-plus";
+import { setupVant } from "./plugins/vant";
 
 const app = createApp(App);
+
+// 使用element-plus插件
+setupElementPlus(app);
+// 使用vant插件
+setupVant(app);
+
 app.use(router);
-app.mount("#app");
+// 路由准备完毕再挂载
+router.isReady().then(() => app.mount("#app"));

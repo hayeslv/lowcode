@@ -8,6 +8,7 @@ import inquirer from "inquirer";
 
 const CWD = process.cwd();
 const PKG_PLATFORM = resolve(CWD, "./packages/platform");
+const PKG_TEMPLATE = resolve(CWD, "./packages/template");
 const PKG_SETVICE = resolve(CWD, "./packages/service");
 
 const run = (bin, args, opts = {}) => execa(bin, args, { stdio: "inherit", ...opts });
@@ -26,6 +27,11 @@ async function create() {
         },
         {
           key: "1",
+          name: "h5 template",
+          value: "template",
+        },
+        {
+          key: "2",
           name: "node 服务",
           value: "setvice",
         },
@@ -36,6 +42,9 @@ async function create() {
   switch (project) {
     case "platform":
       run("npm", ["run", "dev"], { cwd: PKG_PLATFORM });
+      break;
+    case "template":
+      run("npm", ["run", "dev"], { cwd: PKG_TEMPLATE });
       break;
     case "service":
       run("npm", ["run", "start"], { cwd: PKG_SETVICE });

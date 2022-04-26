@@ -3,6 +3,8 @@ import { defineConfig } from "vite";
 import Vue from "@vitejs/plugin-vue";
 import VueJsx from "@vitejs/plugin-vue-jsx";
 import AutoImport from "unplugin-auto-import/vite";
+import Components from "unplugin-vue-components/vite";
+import { ElementPlusResolver, VantResolver } from "unplugin-vue-components/resolvers";
 
 export default defineConfig({
   resolve: {
@@ -22,6 +24,10 @@ export default defineConfig({
       ],
       dts: "./auto-imports.d.ts",
       imports: ["vue", "vue-router"],
+    }),
+    Components({
+      dts: true,
+      resolvers: [ElementPlusResolver(), VantResolver()],
     }),
   ],
   css: {

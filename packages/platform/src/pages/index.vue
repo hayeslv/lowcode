@@ -1,16 +1,9 @@
 <script setup lang="ts">
-import Foo from "~/components/Foo.vue";
 </script>
 
 <template>
   <div>
-    <p>
-      <a href="https://github.com/hayeslv/vites/" target="_blank">Vites</a>
-    </p>
-    <p>
-      <em>Vite Starter Template</em>
-    </p>
-    <Foo />
+    <el-button type="primary">12321</el-button>
   </div>
 </template>
 

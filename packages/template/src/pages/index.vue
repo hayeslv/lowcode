@@ -17,6 +17,6 @@ import Foo from "~/components/Foo.vue";
 <style lang="scss" scoped>
 em{
   display: block;
-  width: 375px;
+  width: 188px;
 }
 </style>
