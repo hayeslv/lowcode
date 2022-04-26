@@ -5,6 +5,9 @@ import App from "./App.vue";
 import { setupElementPlus } from "./plugins/element-plus";
 import { setupVant } from "./plugins/vant";
 
+import "virtual:windi.css";
+import "virtual:windi-devtools";
+
 const app = createApp(App);
 
 // 使用element-plus插件

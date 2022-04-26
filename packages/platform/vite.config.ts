@@ -5,6 +5,7 @@ import VueJsx from "@vitejs/plugin-vue-jsx";
 import AutoImport from "unplugin-auto-import/vite";
 import Components from "unplugin-vue-components/vite";
 import { ElementPlusResolver, VantResolver } from "unplugin-vue-components/resolvers";
+import WindiCSS from "vite-plugin-windicss";
 
 export default defineConfig({
   resolve: {
@@ -15,6 +16,7 @@ export default defineConfig({
   plugins: [
     Vue({ reactivityTransform: true }),
     VueJsx(),
+    WindiCSS(),
     AutoImport({
       include: [
         /\.[tj]sx?$/, // .ts, .tsx, .js, .jsx

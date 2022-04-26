@@ -2,9 +2,11 @@
 </script>
 
 <template>
-  <div>
-    <el-button type="primary">12321</el-button>
-  </div>
+  <el-container>
+    <el-header height="80px" class="flex item-center shadow-md">
+      <Header />
+    </el-header>
+  </el-container>
 </template>
 
 <style lang="scss" scoped>
