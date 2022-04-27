@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import PageHeader from "~/layout/page-header/index.vue";
 import LeftAside from "../layout/left-aside/index.vue";
+import SimulatorEditor from "../layout/simulator-editor/index.vue";
 </script>
 
 <template>
@@ -10,10 +11,10 @@ import LeftAside from "../layout/left-aside/index.vue";
     </el-header>
     <el-container class="layout-container">
       <el-aside width="380px" class="shadow-sm">
-        <LeftAside />
+        <left-aside />
       </el-aside>
       <el-main>
-        <div>中间编辑区域</div>
+        <simulator-editor />
         <div>右侧属性面板</div>
       </el-main>
     </el-container>

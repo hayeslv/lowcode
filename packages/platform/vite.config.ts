@@ -40,4 +40,7 @@ export default defineConfig({
       },
     },
   },
+  optimizeDeps: {
+    include: ["@vueuse/core", "element-plus", "vant", "lodash-es", "vuedraggable"],
+  },
 });
