@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { VideoPlay } from "@element-plus/icons-vue";
+import { useTools } from "./useTools";
+
+const tools = useTools();
 </script>
 
 <template>
@@ -10,12 +13,16 @@ import { VideoPlay } from "@element-plus/icons-vue";
     </el-col>
     <!-- 中间：工具栏 -->
     <el-col class="flex items-center" :span="12">
-      <div>工具1</div>
-      <div>工具2</div>
-      <div>工具3</div>
-      <div>工具4</div>
-      <div>工具5</div>
-      <div>工具6</div>
+      <template v-for="(tool, index) in tools" :key="index">
+        <div class="w-50px">
+          <div class="tool-item flex flex-col items-center cursor-pointer" @click="tool.onClick">
+            <el-icon>
+              <component :is="tool.icon" />
+            </el-icon>
+            <div class="mt-4px text-sm">{{ tool.title }}</div>
+          </div>
+        </div>
+      </template>
     </el-col>
     <!-- 右侧：操作 -->
     <el-col :span="6" class="flex justify-end items-center">
