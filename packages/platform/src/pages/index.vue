@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import Header from "~/layout/Header/index.vue";
 </script>
 
 <template>
