@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import Header from "~/layout/Header/index.vue";
-import LeftAside from "../layout/LeftAside/index.vue";
+import PageHeader from "~/layout/page-header/index.vue";
+import LeftAside from "../layout/left-aside/index.vue";
 </script>
 
 <template>
   <el-container>
     <el-header height="80px" class="flex item-center shadow-md">
-      <Header />
+      <page-header />
     </el-header>
     <el-container class="layout-container">
       <el-aside width="380px" class="shadow-sm">
@@ -35,6 +35,7 @@ import LeftAside from "../layout/LeftAside/index.vue";
 .el-main {
   position: relative;
   padding: 12px;
+  background-color: #f5f5f5;
   @media(min-width: 1100px) {
     overflow-x: hidden;
   }
