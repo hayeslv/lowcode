@@ -15,6 +15,7 @@
     "dev:platform": "pnpm --dir packages/platform dev",
     "build": "pnpm run build -r",
     "stub": "pnpm run stub -r",
+    "test": "pnpm run test -r",
     "publish": "pnpm publish --filter '@hayeslc/*' --no-git-checks",
     "lint": "eslint .",
     "commit": "git add . && git cz",
@@ -33,7 +34,8 @@
     "eslint-define-config": "^1.4.0",
     "husky": "^7.0.4",
     "typescript": "^4.5.4",
-    "unbuild": "^0.7.4"
+    "unbuild": "^0.7.4",
+    "vitest": "^0.10.0"
   },
   "dependencies": {
     "execa": "^6.1.0",

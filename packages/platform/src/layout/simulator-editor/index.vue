@@ -1,8 +1,8 @@
 <script lang="ts">
 import { defineComponent } from "vue";
-// import DraggableTransitionGroup from "./draggable-transition-group.vue";
+import DraggableTransitionGroup from "./draggable-transition-group.vue";
 export default defineComponent({
-  // components: { DraggableTransitionGroup },
+  components: { DraggableTransitionGroup },
   setup() {
     const state = reactive({
       drag: false,
@@ -19,8 +19,7 @@ export default defineComponent({
   <div class="simulator-container">
     <div class="simulator-editor">
       <div class="simulator-editor-content">
-        123
-        <!-- <DraggableTransitionGroup
+        <DraggableTransitionGroup
           v-model:drag="drag"
           class="!min-h-680px"
           draggable=".item-drag"
@@ -39,7 +38,7 @@ export default defineComponent({
               222
             </div>
           </template>
-        </DraggableTransitionGroup> -->
+        </DraggableTransitionGroup>
       </div>
     </div>
   </div>
