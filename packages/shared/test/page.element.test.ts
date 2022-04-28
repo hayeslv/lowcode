@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { PageElement, Project } from "../src";
+import { Project } from "../src";
 
 describe("page.element", () => {
   const project = Project.create();

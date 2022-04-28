@@ -1,48 +1,39 @@
 <script lang="ts">
 import { defineComponent } from "vue";
-import DraggableTransitionGroup from "./draggable-transition-group.vue";
+import EditorWrap from "./editor-wrap.vue";
+import Grid from "./Grid.vue";
 export default defineComponent({
-  components: { DraggableTransitionGroup },
+  components: { EditorWrap, Grid },
+  props: {
+    isEdit: { type: Boolean, default: true },
+  },
   setup() {
-    const state = reactive({
-      drag: false,
-    });
-
-    return {
-      ...toRefs(state),
-    };
   },
 });
 </script>
 
 <template>
-  <div class="simulator-container">
-    <div class="simulator-editor">
-      <div class="simulator-editor-content">
-        <DraggableTransitionGroup
-          v-model:drag="drag"
-          class="!min-h-680px"
-          draggable=".item-drag"
-        >
-          <template #item="{ element: outElement }">
-            <div
-              class="list-group-item"
-              :data-label="outElement.label"
-              :class="{
-                focus: outElement.focus,
-                focusWithChild: outElement.focusWithChild,
-                drag,
-                ['has-slot']: !!Object.keys(outElement.props.slots || {}).length
-              }"
-            >
-              222
-            </div>
-          </template>
-        </DraggableTransitionGroup>
-      </div>
+  <EditorWrap>
+    <div class="editor" :class="{ edit: isEdit }">
+      <!-- 网格线 -->
+      <Grid />
     </div>
-  </div>
+  </EditorWrap>
 </template>
 
 <style lang="scss" scoped>
+.editor{
+  position: relative;
+  background-color: #fff;
+  margin: auto;
+}
+.edit {
+  width: 100%;
+  height: 100%;
+  .component {
+    outline: none;
+    width: 100%;
+    height: 100%;
+  }
+}
 </style>

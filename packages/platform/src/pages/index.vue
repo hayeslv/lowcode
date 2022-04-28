@@ -9,14 +9,14 @@ import SimulatorEditor from "../layout/simulator-editor/index.vue";
     <el-header height="80px" class="flex item-center shadow-md">
       <page-header />
     </el-header>
-    <el-container class="layout-container">
+    <el-container class="layout-container flex w-full">
       <el-aside width="380px" class="shadow-sm">
         <left-aside />
       </el-aside>
-      <el-main>
+      <main class="main flex-1 min-w-500px">
         <simulator-editor />
-        <div>右侧属性面板</div>
-      </el-main>
+      </main>
+      <section class="w-250px min-w-250px">右侧属性列表</section>
     </el-container>
   </el-container>
 </template>
@@ -33,12 +33,8 @@ import SimulatorEditor from "../layout/simulator-editor/index.vue";
 .el-aside{
   background: #fff;
 }
-.el-main {
+.main {
   position: relative;
-  padding: 12px;
-  background-color: #f5f5f5;
-  @media(min-width: 1100px) {
-    overflow-x: hidden;
-  }
+  background-color: #ddd;
 }
 </style>
