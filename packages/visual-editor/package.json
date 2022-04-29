@@ -13,6 +13,7 @@
     "build": "vue-tsc --noEmit && vite build"
   },
   "dependencies": {
+    "element-plus": "^2.1.11",
     "vue": "^3.2.25",
     "vue-router": "^4.0.14"
   },
