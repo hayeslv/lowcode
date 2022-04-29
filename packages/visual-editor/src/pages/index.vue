@@ -11,8 +11,8 @@ import VisualEditor from "~/components/visual-editor";
 
 const jsonData = ref({
   container: {
-    height: 800,
-    width: 500,
+    height: 500,
+    width: 800,
   },
   blocks: [
     {
@@ -20,7 +20,7 @@ const jsonData = ref({
       left: 100,
     },
     {
-      top: 100,
+      top: 200,
       left: 200,
     },
   ],

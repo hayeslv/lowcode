@@ -1,5 +1,5 @@
 import type { PropType } from "vue";
-import { defineComponent } from "vue";
+import { computed, defineComponent } from "vue";
 import type { VisualEditorBlockData } from "~/types/visual-editor";
 
 export const VisualEditorBlock = defineComponent({
@@ -9,9 +9,16 @@ export const VisualEditorBlock = defineComponent({
       required: true,
     },
   },
-  setup() {},
+  setup(props) {
+    const styles = computed(() => ({
+      top: `${props.block.top}px`,
+      left: `${props.block.left}px`,
+    }));
+
+    return { styles };
+  },
   render() {
-    return <div class="visual-editor-block">
+    return <div class="visual-editor-block" style={this.styles}>
       这是一个block
     </div>;
   },

@@ -64,9 +64,22 @@ $primary: #409EFF;            // 主色调
     background-color: rgba(#fff, 0.5);
 
     & > .visual-editor-content {
+      display: flex;
+      justify-content: center;
       height: 100%;
       width: 100%;
       overflow: auto;
+
+      & > .visual-editor-container{
+        position: relative;
+        background-color: #fff;
+        flex-shrink: 0;
+        flex-grow: 0;
+
+        .visual-editor-block {
+          position: absolute;
+        }
+      }
     }
   }
 }
