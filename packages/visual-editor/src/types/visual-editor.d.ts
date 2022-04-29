@@ -8,5 +8,5 @@ export interface VisualEditorModelValue {
     width: number;
     height: number;
   };
-  blocks: VisualEditorBlockData[];
+  blocks?: VisualEditorBlockData[];
 }

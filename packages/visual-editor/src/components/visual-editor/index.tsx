@@ -1,7 +1,9 @@
 import "./index.scss";
 import type { PropType } from "vue";
 import { defineComponent } from "vue";
-import type { VisualEditorModelValue } from "./visual-editor";
+import type { VisualEditorModelValue } from "~/types/visual-editor";
+import { useModel } from "./hooks/useModel";
+import { VisualEditorBlock } from "../visual-editor-block";
 
 export default defineComponent({
   props: {
@@ -12,8 +14,11 @@ export default defineComponent({
   emits: {
     "update:modelValue": (val?: VisualEditorModelValue) => true,
   },
-  setup() {
+  setup(props, { emit }) {
+    const dataModel = useModel(() => props.modelValue, val => emit("update:modelValue", val));
+    console.log("dataModel:", dataModel);
 
+    return { dataModel };
   },
   render() {
     return <div class="visual-editor">
@@ -28,9 +33,12 @@ export default defineComponent({
       </div>
       <div class="visual-editor-body">
         <div class="visual-editor-content">
-          <div>visual-editor-content</div>
+          {!!this.dataModel.value && !!this.dataModel.value.blocks && (
+            this.dataModel.value.blocks.map((block, index) => (
+              <VisualEditorBlock block={block} key={index} />
+            ))
+          )}
         </div>
-
       </div>
     </div>;
   },
