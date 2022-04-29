@@ -1,22 +1,39 @@
-<script lang="ts">
+<script lang="ts" setup>
 import { defineComponent } from "vue";
+import { getComponentData } from "~/hooks/useComponentData";
+import { initEditor } from "~/hooks/useEditor";
 import EditorWrap from "./editor-wrap.vue";
 import Grid from "./Grid.vue";
-export default defineComponent({
-  components: { EditorWrap, Grid },
-  props: {
-    isEdit: { type: Boolean, default: true },
-  },
-  setup() {
-  },
+import Shape from "./shape.vue";
+
+const props = defineProps({
+  isEdit: { type: Boolean, default: true },
+});
+
+const componentData = getComponentData();
+
+onMounted(() => {
+  initEditor("#editor");
+});
+
+watch(() => componentData, () => {
+  console.log(123);
 });
 </script>
 
 <template>
   <EditorWrap>
-    <div class="editor" :class="{ edit: isEdit }">
+    <div id="editor" class="editor" :class="{ edit: isEdit }">
       <!-- 网格线 -->
       <Grid />
+      <!--页面组件列表展示-->
+      <Shape
+        v-for="(item, index) in componentData"
+        :key="item.id"
+        :index="index"
+      >
+        <component :is="item.component" />
+      </Shape>
     </div>
   </EditorWrap>
 </template>

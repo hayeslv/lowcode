@@ -12,5 +12,6 @@ module.exports = defineConfig({
     "@typescript-eslint/no-inferrable-types": "off",
     "@typescript-eslint/no-var-requires": "off",
     "import/first": "off",
+    "@typescript-eslint/brace-style": ["warn", "1tbs", { allowSingleLine: true }],
   },
 });
