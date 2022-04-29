@@ -6,7 +6,9 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from "vue";
 import VisualEditor from "~/components/visual-editor";
+import { TestUseModel } from "~/components/visual-editor/hooks/useModel";
 
 </script>
 

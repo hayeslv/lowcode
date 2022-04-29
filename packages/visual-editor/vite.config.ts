@@ -2,7 +2,6 @@ import path from "path";
 import { defineConfig } from "vite";
 import Vue from "@vitejs/plugin-vue";
 import VueJsx from "@vitejs/plugin-vue-jsx";
-import AutoImport from "unplugin-auto-import/vite";
 import WindiCSS from "vite-plugin-windicss";
 
 export default defineConfig({
@@ -15,16 +14,6 @@ export default defineConfig({
     Vue({ reactivityTransform: true }),
     VueJsx(),
     WindiCSS(),
-    AutoImport({
-      include: [
-        /\.[tj]sx?$/, // .ts, .tsx, .js, .jsx
-        /\.vue$/,
-        /\.vue\?vue/, // .vue
-        /\.md$/, // .md
-      ],
-      dts: "./auto-imports.d.ts",
-      imports: ["vue", "vue-router"],
-    }),
   ],
   css: {
     preprocessorOptions: {

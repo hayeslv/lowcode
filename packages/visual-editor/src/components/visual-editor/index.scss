@@ -61,5 +61,12 @@ $primary: #409EFF;            // 主色调
     padding-right: $operatorSize;
     box-sizing: border-box;
     background-color: skyblue;
+    height: 100%;
+
+    & > .visual-editor-content {
+      height: 100%;
+      width: 100%;
+      overflow: auto;
+    }
   }
 }
