@@ -1,18 +1,14 @@
-<script setup lang="ts">
-import Foo from "~/components/Foo.vue";
-</script>
-
 <template>
   <div>
-    <p>
-      <a href="https://github.com/hayeslv/vites/" target="_blank">Vites</a>
-    </p>
-    <p>
-      <em>Vite Starter Template</em>
-    </p>
-    <Foo />
+    <h1>这是个页面内容</h1>
+    <VisualEditor />
   </div>
 </template>
+
+<script setup lang="ts">
+import VisualEditor from "~/components/visual-editor";
+
+</script>
 
 <style lang="scss" scoped>
 </style>

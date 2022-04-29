@@ -10,6 +10,7 @@ const CWD = process.cwd();
 const PKG_PLATFORM = resolve(CWD, "./packages/platform");
 const PKG_TEMPLATE = resolve(CWD, "./packages/template");
 const PKG_SETVICE = resolve(CWD, "./packages/service");
+const PKG_VISUALEDITOR = resolve(CWD, "./packages/visual-editor");
 
 const run = (bin, args, opts = {}) => execa(bin, args, { stdio: "inherit", ...opts });
 
@@ -35,6 +36,11 @@ async function create() {
           name: "node 服务",
           value: "setvice",
         },
+        {
+          key: "3",
+          name: "可视化拖拽",
+          value: "visual-editor",
+        },
       ],
     },
   ]);
@@ -48,6 +54,9 @@ async function create() {
       break;
     case "service":
       run("npm", ["run", "start"], { cwd: PKG_SETVICE });
+      break;
+    case "visual-editor":
+      run("npm", ["run", "dev"], { cwd: PKG_VISUALEDITOR });
       break;
   }
 }

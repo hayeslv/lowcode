@@ -151,9 +151,11 @@ importers:
       typescript: ^4.5.4
       unplugin-auto-import: ^0.7.1
       vite: ^2.8.0
+      vite-plugin-windicss: ^1.8.4
       vue: ^3.2.25
       vue-router: ^4.0.14
       vue-tsc: ^0.29.8
+      windicss: ^3.5.1
     dependencies:
       vue: 3.2.31
       vue-router: 4.0.14_vue@3.2.31
@@ -167,7 +169,9 @@ importers:
       typescript: 4.6.3
       unplugin-auto-import: 0.7.1_vite@2.9.6
       vite: 2.9.6_sass@1.49.9
+      vite-plugin-windicss: 1.8.4_vite@2.9.6
       vue-tsc: 0.29.8_typescript@4.6.3
+      windicss: 3.5.1
 
 packages:
 
@@ -3210,7 +3214,7 @@ packages:
       '@nodelib/fs.walk': 1.2.8
       glob-parent: 5.1.2
       merge2: 1.4.1
-      micromatch: 4.0.4
+      micromatch: 4.0.5
     dev: true
 
   /fast-json-stable-stringify/2.1.0:
@@ -5595,6 +5599,20 @@ packages:
       debug: 4.3.4
       kolorist: 1.5.1
       vite: 2.8.6_sass@1.49.9
+      windicss: 3.5.1
+    transitivePeerDependencies:
+      - supports-color
+    dev: true
+
+  /vite-plugin-windicss/1.8.4_vite@2.9.6:
+    resolution: {integrity: sha512-LSZAO8BZn3x406GRbYX5t5ONXXJVdqiQtN1qrznLA/Dy5/NzZVhfcrL6N1qEYYO7HsCDT4pLAjTzObvDnM9Y8A==}
+    peerDependencies:
+      vite: ^2.0.1
+    dependencies:
+      '@windicss/plugin-utils': 1.8.4
+      debug: 4.3.4
+      kolorist: 1.5.1
+      vite: 2.9.6_sass@1.49.9
       windicss: 3.5.1
     transitivePeerDependencies:
       - supports-color
