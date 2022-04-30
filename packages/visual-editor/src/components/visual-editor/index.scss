@@ -65,6 +65,9 @@ $primary: #409EFF;            // 主色调
         border-color: $primary;
         cursor: grab;
       }
+      &:active {
+        cursor: grabbing;
+      }
     }
     .visual-editor-menu-item-label{
       position: absolute;
