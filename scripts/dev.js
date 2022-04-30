@@ -8,7 +8,6 @@ import inquirer from "inquirer";
 
 const CWD = process.cwd();
 const PKG_PLATFORM = resolve(CWD, "./packages/platform");
-const PKG_TEMPLATE = resolve(CWD, "./packages/template");
 const PKG_SETVICE = resolve(CWD, "./packages/service");
 const PKG_VISUALEDITOR = resolve(CWD, "./packages/visual-editor");
 
@@ -28,16 +27,11 @@ async function create() {
         },
         {
           key: "1",
-          name: "h5 template",
-          value: "template",
-        },
-        {
-          key: "2",
           name: "node 服务",
           value: "setvice",
         },
         {
-          key: "3",
+          key: "2",
           name: "可视化拖拽",
           value: "visual-editor",
         },
@@ -48,9 +42,6 @@ async function create() {
   switch (project) {
     case "platform":
       run("npm", ["run", "dev"], { cwd: PKG_PLATFORM });
-      break;
-    case "template":
-      run("npm", ["run", "dev"], { cwd: PKG_TEMPLATE });
       break;
     case "service":
       run("npm", ["run", "start"], { cwd: PKG_SETVICE });
