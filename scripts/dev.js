@@ -6,10 +6,16 @@ import { execa } from "execa";
 import { resolve } from "path";
 import inquirer from "inquirer";
 
+const Project = {
+  PLATFORM: "platform",
+  SERVICE: "service",
+  EDITOR: "visual-editor",
+};
+
 const CWD = process.cwd();
 const PKG_PLATFORM = resolve(CWD, "./packages/platform");
 const PKG_SETVICE = resolve(CWD, "./packages/service");
-const PKG_VISUALEDITOR = resolve(CWD, "./packages/visual-editor");
+const PKG_VISUALEDITOR = resolve(CWD, `./packages/${Project.EDITOR}`);
 
 const run = (bin, args, opts = {}) => execa(bin, args, { stdio: "inherit", ...opts });
 
@@ -33,7 +39,7 @@ async function create() {
         {
           key: "2",
           name: "可视化拖拽",
-          value: "visual-editor",
+          value: Project.EDITOR,
         },
       ],
     },
