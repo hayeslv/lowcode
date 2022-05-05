@@ -15,6 +15,6 @@ VisualConfig.registry("button", {
 });
 VisualConfig.registry("input", {
   label: "输入框",
-  preview: () => <ElInput disabled />,
-  render: () => <ElInput disabled />,
+  preview: () => <ElInput />,
+  render: () => <ElInput />,
 });

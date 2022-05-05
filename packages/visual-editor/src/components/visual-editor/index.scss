@@ -121,6 +121,23 @@ $primary: #409EFF;            // 主色调
 
         .visual-editor-block {
           position: absolute;
+
+          &:after {
+            $space: -3px;
+            position: absolute;
+            top: $space;
+            bottom: $space;
+            left: $space;
+            right: $space;
+            content: "";
+          }
+
+          &.visual-editor-block-focus {
+            &::after {
+              border: 1px dashed $primary;
+            }
+
+          }
         }
       }
     }

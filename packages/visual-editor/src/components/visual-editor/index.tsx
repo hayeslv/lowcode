@@ -5,6 +5,7 @@ import type { VisualEditorComponent, VisualEditorModelValue } from "~/types/visu
 import { useModel } from "./hooks/useModel";
 import { VisualEditorBlock } from "../visual-editor-block";
 import type { VisualEditorConfig } from "~/utils";
+import { createNewBlock } from "~/utils";
 
 export default defineComponent({
   props: {
@@ -63,17 +64,16 @@ export default defineComponent({
         dragover: (e: DragEvent) => e.preventDefault(),
         drop: (e: DragEvent) => {
           const blocks = dataModel.value.blocks || [];
-          blocks.push({
-            top: e.offsetY,
-            left: e.offsetX,
-            componentKey: component!.key,
-            adjustPosition: true,
-          });
+          blocks.push(
+            createNewBlock({ component: component!, top: e.offsetY, left: e.offsetX }),
+          );
           dataModel.value = { ...dataModel.value, blocks };
         },
       };
       return blockHandler;
     })();
+
+    const blockDragger = (() => {})();
 
     return () => <div class="visual-editor">
       <div class="visual-editor-menu">

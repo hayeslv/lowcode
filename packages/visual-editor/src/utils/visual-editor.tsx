@@ -1,4 +1,4 @@
-import type { VisualEditorComponent } from "~/types";
+import type { VisualEditorBlockData, VisualEditorComponent } from "~/types";
 
 export function createVisualEditorConfig() {
   const componentList: VisualEditorComponent[] = [];
@@ -16,3 +16,23 @@ export function createVisualEditorConfig() {
 }
 
 export type VisualEditorConfig = ReturnType<typeof createVisualEditorConfig>;
+
+export function createNewBlock(
+  {
+    component,
+    left,
+    top,
+  }: {
+    component: VisualEditorComponent;
+    left: number;
+    top: number;
+  },
+): VisualEditorBlockData {
+  return {
+    top,
+    left,
+    componentKey: component!.key,
+    adjustPosition: true,
+    focus: false,
+  };
+}
