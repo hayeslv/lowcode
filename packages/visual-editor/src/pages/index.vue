@@ -19,6 +19,11 @@ const jsonData = ref({
   },
   blocks: [
     {
+      top: 200,
+      left: 100,
+      componentKey: "text",
+    },
+    {
       top: 100,
       left: 100,
       componentKey: "button",

@@ -53,7 +53,8 @@
       ],
       "@typescript-eslint/no-use-before-define": "off",
       "no-return-assign": "off",
-      "no-multi-spaces":"off"
+      "no-multi-spaces":"off",
+      "@typescript-eslint/brace-style": "off"
     }
   }
 }

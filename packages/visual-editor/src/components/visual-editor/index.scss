@@ -121,6 +121,7 @@ $primary: #409EFF;            // 主色调
 
         .visual-editor-block {
           position: absolute;
+          cursor: move;
 
           &:after {
             $space: -3px;
