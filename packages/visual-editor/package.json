@@ -50,7 +50,9 @@
             "requireLast": false
           }
         }
-      ]
+      ],
+      "@typescript-eslint/no-use-before-define": "off",
+      "no-return-assign": "off"
     }
   }
 }
