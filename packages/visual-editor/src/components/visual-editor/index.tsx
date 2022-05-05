@@ -22,14 +22,26 @@ export default defineComponent({
     "update:modelValue": (val?: VisualEditorModelValue) => true,
   },
   setup(props, { emit }) {
+    // 双向绑定至容器中的组件数据
     const dataModel = useModel(() => props.modelValue, val => emit("update:modelValue", val));
+    // container节点dom对象的引用
     const containerRef = ref({} as HTMLDivElement);
-
+    // container节点的样式对象
     const containerStyles = computed(() => ({
       width: `${dataModel.value.container.width}px`,
       height: `${dataModel.value.container.height}px`,
     }));
-
+    // 计算选中与未选中的block数据
+    const focusData = computed(() => {
+      const focus: VisualEditorBlockData[] = [];
+      const unfocus: VisualEditorBlockData[] = [];
+      dataModel.value.blocks?.forEach(block => (block.focus ? focus : unfocus).push(block));
+      return {
+        focus,    // 此时选中的数据
+        unfocus,  // 此时未选中的数据
+      };
+    });
+    // 对外暴露的一些方法
     const methods = {
       clearFocus: (block?: VisualEditorBlockData) => {
         let blocks = dataModel.value.blocks || [];
@@ -41,7 +53,7 @@ export default defineComponent({
         blocks.forEach(block => block.focus = false);
       },
     };
-
+    // 处理从菜单拖拽组件到容器的相关动作
     const menuDragger = (() => {
       let component = null as null | VisualEditorComponent;
 
@@ -84,13 +96,14 @@ export default defineComponent({
       };
       return blockHandler;
     })();
-
+    // 处理block选中的相关动作
     const focusHandler = (() => {
       return {
         container: {
           onMousedown: (e: MouseEvent) => {
             e.stopPropagation();
             e.preventDefault();
+            // 点击空白处，清空所有选中的bloack
             methods.clearFocus();
           },
         },
@@ -98,15 +111,58 @@ export default defineComponent({
           onMousedown: (e: MouseEvent, block: VisualEditorBlockData) => {
             e.stopPropagation();
             e.preventDefault();
+            // 按住了 shift 键
             if (e.shiftKey) {
-              block.focus = !block.focus;
+              // 如果此时没有选中的 block，就选中这个 block，否则让这个 block 的选中状态取反
+              if (focusData.value.focus.length <= 1) {
+                block.focus = true;
+              } else {
+                block.focus = !block.focus;
+              }
             } else {
-              block.focus = !block.focus;
-              methods.clearFocus(block);
+              // 如果当前这个block没有选中，那么将其选中，并且清除其他的block
+              if (!block.focus) {
+                block.focus = true;
+                methods.clearFocus(block);
+              }
             }
+            blockDragger.mousedown(e);
           },
         },
       };
+    })();
+    // 处理block在container中拖拽移动的相关动作
+    const blockDragger = (() => {
+      let dragState = {
+        startX: 0,
+        startY: 0,
+        startPos: [] as { left: number; top: number }[],
+      };
+      const mousedown = (e: MouseEvent) => {
+        dragState = {
+          startX: e.clientX,
+          startY: e.clientY,
+          startPos: focusData.value.focus.map(({ top, left }) => ({ top, left })),  // 每个激活元素的top、left初始值
+        };
+        document.addEventListener("mousemove", mousemove);
+        document.addEventListener("mouseup", mouseup);
+      };
+
+      const mousemove = (e: MouseEvent) => {
+        const durX = e.clientX - dragState.startX;
+        const durY = e.clientY - dragState.startY;
+        focusData.value.focus.forEach((block, index) => {
+          block.top = dragState.startPos[index].top + durY;
+          block.left = dragState.startPos[index].left + durX;
+        });
+      };
+
+      const mouseup = () => {
+        document.removeEventListener("mousemove", mousemove);
+        document.removeEventListener("mouseup", mouseup);
+      };
+
+      return { mousedown };
     })();
 
     return () => <div class="visual-editor">
