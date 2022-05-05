@@ -33,6 +33,7 @@ export default defineComponent({
       let component = null as null | VisualEditorComponent;
 
       const blockHandler = {
+        // 处理拖拽菜单组件开始动作
         dragstart: (e: DragEvent, current: VisualEditorComponent) => {
           containerRef.value.addEventListener("dragenter", containerHandler.dragenter);
           containerRef.value.addEventListener("dragover", containerHandler.dragover);
@@ -41,10 +42,15 @@ export default defineComponent({
 
           component = current;
         },
+        // 处理拖拽菜单组件结束动作
         dragend: () => {
+          // 拖拽菜单组件，进入容器的时候，设置鼠标的可放置状态
           containerRef.value.removeEventListener("dragenter", containerHandler.dragenter);
+          // 拖拽菜单组件，鼠标在容器中移动的时候，禁用默认事件
           containerRef.value.removeEventListener("dragover", containerHandler.dragover);
+          // 如果拖拽过程中，鼠标离开了容器，设置鼠标为不可放置的状态
           containerRef.value.removeEventListener("dragleave", containerHandler.dragleave);
+          // 在容器中放置的时候，通过事件对象的 offsetX 和 offsetY 添加一条组件数据
           containerRef.value.removeEventListener("drop", containerHandler.drop);
           component = null;
         },
