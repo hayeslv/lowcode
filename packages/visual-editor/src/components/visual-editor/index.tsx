@@ -5,7 +5,7 @@ import type { VisualEditorBlockData, VisualEditorComponent, VisualEditorModelVal
 import { useModel } from "./hooks/useModel";
 import { VisualEditorBlock } from "../visual-editor-block";
 import type { VisualEditorConfig } from "~/utils";
-import { createNewBlock } from "~/utils";
+import { useVisualCommand, createNewBlock } from "~/utils";
 
 export default defineComponent({
   props: {
@@ -165,6 +165,14 @@ export default defineComponent({
       return { mousedown };
     })();
 
+    const commander = useVisualCommand();
+
+    const buttons = [
+      { label: "撤销", icon: "icon-back", handler: commander.undo, tip: "ctrl+z" },
+      { label: "重做", icon: "icon-forward", handler: commander.redo, tip: "ctrl+y, ctrl+shift+z" },
+      { label: "删除", icon: "icon-delete", handler: () => commander.delete(), tip: "ctrl+d, backspace, delete" },
+    ];
+
     return () => <div class="visual-editor">
       <div class="visual-editor-menu">
         {props.config.componentList.map(component => (
@@ -179,7 +187,10 @@ export default defineComponent({
         ))}
       </div>
       <div class="visual-editor-head">
-      visual-editor-head
+        {buttons.map((btn, index) => <div key={index} class="visual-editor-head-button">
+          <i class={`iconfont ${btn.icon}`}></i>
+          <span>{btn.label}</span>
+        </div>)}
       </div>
       <div class="visual-editor-operator">
       visual-editor-operator

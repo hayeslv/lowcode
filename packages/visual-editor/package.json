@@ -35,7 +35,8 @@
       "@hayeslv"
     ],
     "ignorePatterns": [
-      "auto-imports.d.ts"
+      "auto-imports.d.ts",
+      "assets/*"
     ],
     "rules": {
       "@typescript-eslint/member-delimiter-style": [
