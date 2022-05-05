@@ -21,10 +21,12 @@ const jsonData = ref({
     {
       top: 100,
       left: 100,
+      componentKey: "button",
     },
     {
       top: 200,
       left: 200,
+      componentKey: "input",
     },
   ],
 });

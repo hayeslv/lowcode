@@ -1,5 +1,6 @@
 // block数据
 export interface VisualEditorBlockData {
+  componentKey: string;
   top: number;
   left: number;
 }

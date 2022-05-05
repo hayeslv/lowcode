@@ -1,13 +1,12 @@
 import type { PropType } from "vue";
 import { computed, defineComponent } from "vue";
 import type { VisualEditorBlockData } from "~/types/visual-editor";
+import type { VisualEditorConfig } from "~/utils";
 
 export const VisualEditorBlock = defineComponent({
   props: {
-    block: {
-      type: Object as PropType<VisualEditorBlockData>,
-      required: true,
-    },
+    block: { type: Object as PropType<VisualEditorBlockData>, required: true },
+    config: { type: Object as PropType<VisualEditorConfig>, required: true },
   },
   setup(props) {
     const styles = computed(() => ({
@@ -15,11 +14,14 @@ export const VisualEditorBlock = defineComponent({
       left: `${props.block.left}px`,
     }));
 
-    return { styles };
-  },
-  render() {
-    return <div class="visual-editor-block" style={this.styles}>
-      这是一个block
-    </div>;
+    return () => {
+      const component = props.config.componentMap[props.block.componentKey];
+      const Render = component.render();
+      return (
+        <div class="visual-editor-block" style={styles.value}>
+          { Render }
+        </div>
+      );
+    };
   },
 });
