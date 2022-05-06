@@ -57,7 +57,8 @@
       "no-return-assign": "off",
       "no-multi-spaces": "off",
       "@typescript-eslint/brace-style": "off",
-      "@typescript-eslint/no-unused-vars": "off"
+      "@typescript-eslint/no-unused-vars": "off",
+      "vue/one-component-per-file": "off"
     }
   }
 }

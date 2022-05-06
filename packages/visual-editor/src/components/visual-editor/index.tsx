@@ -5,8 +5,9 @@ import type { VisualEditorBlockData, VisualEditorComponent, VisualEditorModelVal
 import { useModel } from "./hooks/useModel";
 import { VisualEditorBlock } from "../visual-editor-block";
 import type { VisualEditorConfig } from "~/utils";
-import { useVisualCommand, createNewBlock } from "~/utils";
+import { $$dialog, useVisualCommand, createNewBlock } from "~/utils";
 import { createEvent } from "~/plugins/event";
+import { ElNotification } from "element-plus";
 
 export default defineComponent({
   props: {
@@ -196,6 +197,22 @@ export default defineComponent({
       { label: "重做", icon: "icon-forward", handler: commander.redo, tip: "ctrl+y, ctrl+shift+z" },
       { label: "删除", icon: "icon-delete", handler: () => commander.delete(), tip: "ctrl+d, backspace, delete" },
       { label: "清空", icon: "icon-reset", handler: () => commander.clear() },
+      {
+        label: "导入",
+        icon: "icon-import",
+        handler: async() => {
+          const text = await $$dialog.input();
+          console.log(text);
+          // const text = await $dialog.textarea("", { title: "请输入导入的JSON数据" });
+          // if (!text) return;
+          // try {
+          //   const data = JSON.parse(text);
+          //   commander.updateModelValue(data);
+          // } catch (e) {
+          //   ElNotification({ title: "导入失败", message: "导入的数据格式不正常，请检查" });
+          // }
+        },
+      },
     ];
 
     return () => <div class="visual-editor">
