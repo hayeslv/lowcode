@@ -20,9 +20,9 @@ export function useCommander() {
     queue: [] as CommandExecutor[],                               // 命令队列
     commandArray: [] as Command[],                                // 命令队列数组
     commands: {} as Record<string, (...args: any[]) => void>,     // 命令对象，方便通过命令的名称调用命令的execute函数，并且执行额外的命令队列的逻辑
-    destoryList: [] as ((() => void) | undefined)[],               // 组件销毁的时候，需要调用的销毁逻辑数组
+    destoryList: [] as ((() => void) | undefined)[],              // 组件销毁的时候，需要调用的销毁逻辑数组
   });
-
+  //* 注册命令 */
   const registry = (command: Command) => {
     state.commandArray.push(command);
     state.commands[command.name] = (...args) => {
@@ -42,16 +42,55 @@ export function useCommander() {
       state.current = current + 1;
     };
   };
+  //* 键盘事件 */
+  const keyboardEvent = (() => {
+    const onKeydown = (e: KeyboardEvent) => {
+      if (document.activeElement !== document.body) return;
+
+      const { key, shiftKey, altKey, ctrlKey, metaKey } = e;
+
+      const keyString: string[] = [];
+
+      if (ctrlKey || metaKey) keyString.push("ctrl");
+      if (shiftKey) keyString.push("shift");
+      if (altKey) keyString.push("alt");
+      keyString.push(key);
+
+      const keyNames = keyString.join("+");
+      // 遍历已注册的指令，如果当前按键组合和已注册的指令匹配上了，则触发指令
+      state.commandArray.forEach(command => {
+        const { keyboard, name } = command;
+        if (!keyboard) return;
+        const keys = Array.isArray(keyboard) ? keyboard : [keyboard];
+        if (keys.indexOf(keyNames) > -1) {
+          // 触发指令
+          state.commands[name]();
+          // 阻止默认事件
+          e.preventDefault();
+          e.stopPropagation();
+        }
+      });
+    };
+
+    const init = () => {
+      window.addEventListener("keydown", onKeydown);
+      return () => window.removeEventListener("keydown", onKeydown);
+    };
+
+    return init;
+  })();
 
   const init = () => {
     const onKeydown = (e: KeyboardEvent) => {
-      console.log("监听到键盘事件");
+      // console.log("监听到键盘事件");
     };
     window.addEventListener("keydown", onKeydown);
     state.commandArray.forEach(command => !!command.init && state.destoryList.push(command.init()));
+    state.destoryList.push(keyboardEvent());
     state.destoryList.push(() => window.removeEventListener("keydown", onKeydown));
   };
 
+  //* 注册撤回命令 */
   registry({
     name: "undo",
     keyboard: "ctrl+z",
@@ -71,7 +110,7 @@ export function useCommander() {
       };
     },
   });
-
+  //* 注册重做命令 */
   registry({
     name: "redo",
     keyboard: ["ctrl+y", "ctrl+shift+z"],
