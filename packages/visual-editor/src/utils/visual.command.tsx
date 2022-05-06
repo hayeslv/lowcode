@@ -44,7 +44,7 @@ export function useVisualCommand(
     },
   });
 
-  /**
+  /*
    * 拖拽命令，适用于三种情况：
    * - 从菜单拖拽组件到容器画布
    * - 在容器中拖拽组件调整位置
@@ -83,12 +83,33 @@ export function useVisualCommand(
     },
   });
 
+  /*
+   * 清空命令
+   */
+  commander.registry({
+    name: "clear",
+    execute: () => {
+      const data = {
+        before: deepcopy(dataModel.value.blocks || []),
+        after: deepcopy([]),
+      };
+      return {
+        redo: () => {
+          updateBlocks(deepcopy(data.after));
+        },
+        undo: () => {
+          updateBlocks(deepcopy(data.before));
+        },
+      };
+    },
+  });
+
   commander.init();
 
   return {
     undo: () => commander.state.commands.undo(),
     redo: () => commander.state.commands.redo(),
     delete: () => commander.state.commands.delete(),
-    drag: () => commander.state.commands.drag(),
+    clear: () => commander.state.commands.clear(),
   };
 }

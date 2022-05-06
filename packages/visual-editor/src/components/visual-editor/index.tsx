@@ -108,16 +108,18 @@ export default defineComponent({
       return {
         container: {
           onMousedown: (e: MouseEvent) => {
-            e.stopPropagation();
             e.preventDefault();
+            // 只处理容器的事件
+            if (e.currentTarget !== e.target) return;
+
             // 点击空白处，清空所有选中的bloack
-            methods.clearFocus();
+            if (!e.shiftKey) {
+              methods.clearFocus();
+            }
           },
         },
         block: {
           onMousedown: (e: MouseEvent, block: VisualEditorBlockData) => {
-            e.stopPropagation();
-            e.preventDefault();
             // 按住了 shift 键
             if (e.shiftKey) {
               // 如果此时没有选中的 block，就选中这个 block，否则让这个 block 的选中状态取反
@@ -193,6 +195,7 @@ export default defineComponent({
       { label: "撤销", icon: "icon-back", handler: commander.undo, tip: "ctrl+z" },
       { label: "重做", icon: "icon-forward", handler: commander.redo, tip: "ctrl+y, ctrl+shift+z" },
       { label: "删除", icon: "icon-delete", handler: () => commander.delete(), tip: "ctrl+d, backspace, delete" },
+      { label: "清空", icon: "icon-reset", handler: () => commander.clear() },
     ];
 
     return () => <div class="visual-editor">
@@ -209,14 +212,17 @@ export default defineComponent({
         ))}
       </div>
       <div class="visual-editor-head">
-        {buttons.map((btn, index) => (
-          <el-tooltip effect="dark" content={btn.tip} placement="bottom">
-            <div key={index} onClick={btn.handler} class="visual-editor-head-button">
-              <i class={`iconfont ${btn.icon}`}></i>
-              <span>{btn.label}</span>
-            </div>
-          </el-tooltip>
-        ))}
+        {buttons.map((btn, index) => {
+          const content = <div key={index} onClick={btn.handler} class="visual-editor-head-button">
+            <i class={`iconfont ${btn.icon}`}></i>
+            <span>{btn.label}</span>
+          </div>;
+          return !btn.tip
+            ? content
+            : <el-tooltip effect="dark" content={btn.tip} placement="bottom">
+              {content}
+            </el-tooltip>;
+        })}
       </div>
       <div class="visual-editor-operator">
       visual-editor-operator
