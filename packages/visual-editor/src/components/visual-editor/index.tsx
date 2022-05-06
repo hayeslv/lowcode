@@ -46,6 +46,9 @@ export default defineComponent({
     const dragstart = createEvent();
     const dragend = createEvent();
 
+    // dragstart.on(() => console.log("dragstart"));
+    // dragend.on(() => console.log("dragend"));
+
     // 对外暴露的一些方法
     const methods = {
       clearFocus: (block?: VisualEditorBlockData) => {
@@ -144,12 +147,14 @@ export default defineComponent({
         startX: 0,
         startY: 0,
         startPos: [] as { left: number; top: number }[],
+        dragging: false,
       };
       const mousedown = (e: MouseEvent) => {
         dragState = {
           startX: e.clientX,
           startY: e.clientY,
           startPos: focusData.value.focus.map(({ top, left }) => ({ top, left })),  // 每个激活元素的top、left初始值
+          dragging: false,
         };
         document.addEventListener("mousemove", mousemove);
         document.addEventListener("mouseup", mouseup);
@@ -158,6 +163,10 @@ export default defineComponent({
       const mousemove = (e: MouseEvent) => {
         const durX = e.clientX - dragState.startX;
         const durY = e.clientY - dragState.startY;
+        if (!dragState.dragging) {
+          dragState.dragging = true;
+          dragstart.emit();
+        }
         focusData.value.focus.forEach((block, index) => {
           block.top = dragState.startPos[index].top + durY;
           block.left = dragState.startPos[index].left + durX;
@@ -167,6 +176,9 @@ export default defineComponent({
       const mouseup = () => {
         document.removeEventListener("mousemove", mousemove);
         document.removeEventListener("mouseup", mouseup);
+        if (dragState.dragging === true) {
+          dragend.emit();
+        }
       };
 
       return { mousedown };

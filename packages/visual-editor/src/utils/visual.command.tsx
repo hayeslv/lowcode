@@ -61,14 +61,14 @@ export function useVisualCommand(
       };
     },
     execute() {
-      const before = deepcopy(this.data.before);
+      const before = this.data.before;
       const after = deepcopy(dataModel.value.blocks || []);
       return {
         redo: () => {
-          updateBlocks(after);
+          updateBlocks(deepcopy(after));
         },
         undo: () => {
-          updateBlocks(before);
+          updateBlocks(deepcopy(before));
         },
       };
     },
