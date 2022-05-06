@@ -6,6 +6,7 @@ import { useModel } from "./hooks/useModel";
 import { VisualEditorBlock } from "../visual-editor-block";
 import type { VisualEditorConfig } from "~/utils";
 import { useVisualCommand, createNewBlock } from "~/utils";
+import { createEvent } from "~/plugins/event";
 
 export default defineComponent({
   props: {
@@ -41,6 +42,10 @@ export default defineComponent({
         unFocus,  // 此时未选中的数据
       };
     });
+
+    const dragstart = createEvent();
+    const dragend = createEvent();
+
     // 对外暴露的一些方法
     const methods = {
       clearFocus: (block?: VisualEditorBlockData) => {
@@ -67,34 +72,33 @@ export default defineComponent({
           containerRef.value.addEventListener("dragover", containerHandler.dragover);
           containerRef.value.addEventListener("dragleave", containerHandler.dragleave);
           containerRef.value.addEventListener("drop", containerHandler.drop);
-
+          dragstart.emit();
           component = current;
         },
         // 处理拖拽菜单组件结束动作
         dragend: () => {
-          // 拖拽菜单组件，进入容器的时候，设置鼠标的可放置状态
           containerRef.value.removeEventListener("dragenter", containerHandler.dragenter);
-          // 拖拽菜单组件，鼠标在容器中移动的时候，禁用默认事件
           containerRef.value.removeEventListener("dragover", containerHandler.dragover);
-          // 如果拖拽过程中，鼠标离开了容器，设置鼠标为不可放置的状态
           containerRef.value.removeEventListener("dragleave", containerHandler.dragleave);
-          // 在容器中放置的时候，通过事件对象的 offsetX 和 offsetY 添加一条组件数据
           containerRef.value.removeEventListener("drop", containerHandler.drop);
           component = null;
         },
       };
       const containerHandler = {
-        // 鼠标进入container的时候
+        // 拖拽菜单组件，进入容器的时候，设置鼠标的可放置状态
         dragenter: (e: DragEvent) => e.dataTransfer!.dropEffect = "move",
-        // 拖拽的过程中离开了，就不允许放置
+        // 如果拖拽过程中，鼠标离开了容器，设置鼠标为不可放置的状态
         dragleave: (e: DragEvent) => e.dataTransfer!.dropEffect = "none",
+        // 拖拽菜单组件，鼠标在容器中移动的时候，禁用默认事件
         dragover: (e: DragEvent) => e.preventDefault(),
+        // 在容器中放置的时候，通过事件对象的 offsetX 和 offsetY 添加一条组件数据
         drop: (e: DragEvent) => {
-          const blocks = dataModel.value.blocks || [];
+          const blocks = [...dataModel.value.blocks || []];
           blocks.push(
             createNewBlock({ component: component!, top: e.offsetY, left: e.offsetX }),
           );
-          dataModel.value = { ...dataModel.value, blocks };
+          methods.updateBlocks(blocks);
+          dragend.emit();
         },
       };
       return blockHandler;
@@ -172,6 +176,8 @@ export default defineComponent({
       focusData,
       updateBlocks: methods.updateBlocks,
       dataModel,
+      dragstart,
+      dragend,
     });
 
     const buttons = [

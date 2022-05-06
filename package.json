@@ -38,6 +38,7 @@
     "vitest": "^0.10.0"
   },
   "dependencies": {
+    "deepcopy": "^2.1.0",
     "execa": "^6.1.0",
     "inquirer": "^8.2.2"
   }
