@@ -34,11 +34,11 @@ export default defineComponent({
     // 计算选中与未选中的block数据
     const focusData = computed(() => {
       const focus: VisualEditorBlockData[] = [];
-      const unfocus: VisualEditorBlockData[] = [];
-      dataModel.value.blocks?.forEach(block => (block.focus ? focus : unfocus).push(block));
+      const unFocus: VisualEditorBlockData[] = [];
+      dataModel.value.blocks?.forEach(block => (block.focus ? focus : unFocus).push(block));
       return {
         focus,    // 此时选中的数据
-        unfocus,  // 此时未选中的数据
+        unFocus,  // 此时未选中的数据
       };
     });
     // 对外暴露的一些方法
@@ -51,6 +51,9 @@ export default defineComponent({
         }
 
         blocks.forEach(block => block.focus = false);
+      },
+      updateBlocks: (blocks?: VisualEditorBlockData[]) => {
+        dataModel.value = { ...dataModel.value, blocks };
       },
     };
     // 处理从菜单拖拽组件到容器的相关动作
@@ -165,7 +168,11 @@ export default defineComponent({
       return { mousedown };
     })();
 
-    const commander = useVisualCommand();
+    const commander = useVisualCommand({
+      focusData,
+      updateBlocks: methods.updateBlocks,
+      dataModel,
+    });
 
     const buttons = [
       { label: "撤销", icon: "icon-back", handler: commander.undo, tip: "ctrl+z" },
@@ -187,7 +194,7 @@ export default defineComponent({
         ))}
       </div>
       <div class="visual-editor-head">
-        {buttons.map((btn, index) => <div key={index} class="visual-editor-head-button">
+        {buttons.map((btn, index) => <div key={index} onClick={btn.handler} class="visual-editor-head-button">
           <i class={`iconfont ${btn.icon}`}></i>
           <span>{btn.label}</span>
         </div>)}
