@@ -41,8 +41,7 @@ export class Project implements IProject {
       project.name = p.name;
       project.description = p.description;
       project.pages = p.pages.map(page => Page.create(page));
-    }
-    else {
+    } else {
       const page = Page.create();
       project.addPage(page);
     }

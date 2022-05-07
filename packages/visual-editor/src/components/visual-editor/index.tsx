@@ -161,11 +161,20 @@ export default defineComponent({
       };
 
       const mousemove = (e: MouseEvent) => {
-        const durX = e.clientX - dragState.startX;
-        const durY = e.clientY - dragState.startY;
+        let durX = e.clientX - dragState.startX;
+        let durY = e.clientY - dragState.startY;
         if (!dragState.dragging) {
           dragState.dragging = true;
           dragstart.emit();
+        }
+        // 移动过程中如果按住了 shift 键，则当前元素只能在原先的基础上单纯的左右或上下移动
+        if (e.shiftKey) {
+          // x和y轴，哪边的偏移量大，就修改哪边的位置
+          if (Math.abs(durX) > Math.abs(durY)) {
+            durY = 0;
+          } else {
+            durX = 0;
+          }
         }
         focusData.value.focus.forEach((block, index) => {
           block.top = dragState.startPos[index].top + durY;
