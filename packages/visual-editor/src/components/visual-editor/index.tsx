@@ -1,10 +1,10 @@
 import "./index.scss";
 import type { PropType } from "vue";
-import { ref, computed, defineComponent } from "vue";
+import { reactive, ref, computed, defineComponent } from "vue";
 import type { VisualEditorBlockData, VisualEditorComponent, VisualEditorModelValue } from "~/types/visual-editor";
 import { useModel } from "./hooks/useModel";
 import { VisualEditorBlock } from "../visual-editor-block";
-import type { VisualEditorConfig } from "~/utils";
+import type { VisualEditorConfig, VisualEditorMarkLines } from "~/utils";
 import { $$dialog, useVisualCommand, createNewBlock } from "~/utils";
 import { createEvent } from "~/plugins/event";
 import { ElNotification } from "element-plus";
@@ -42,6 +42,10 @@ export default defineComponent({
         focus,    // 此时选中的数据
         unFocus,  // 此时未选中的数据
       };
+    });
+
+    const state = reactive({
+      selectBlock: null as null | VisualEditorBlockData,    // 当前选中的组件
     });
 
     const dragstart = createEvent();
@@ -113,9 +117,10 @@ export default defineComponent({
             // 只处理容器的事件
             if (e.currentTarget !== e.target) return;
 
-            // 点击空白处，清空所有选中的bloack
             if (!e.shiftKey) {
+              // 点击空白处，清空所有选中的bloack
               methods.clearFocus();
+              state.selectBlock = null;
             }
           },
         },
@@ -136,6 +141,7 @@ export default defineComponent({
                 methods.clearFocus(block);
               }
             }
+            state.selectBlock = block;
             blockDragger.mousedown(e);
           },
         },
@@ -143,39 +149,101 @@ export default defineComponent({
     })();
     // 处理block在container中拖拽移动的相关动作
     const blockDragger = (() => {
+      const mark = reactive({
+        x: null as null | number,
+        y: null as null | number,
+      });
+
       let dragState = {
         startX: 0,
         startY: 0,
+        startLeft: 0,
+        startTop: 0,
         startPos: [] as { left: number; top: number }[],
         dragging: false,
+        markLines: {} as VisualEditorMarkLines,
       };
       const mousedown = (e: MouseEvent) => {
         dragState = {
           startX: e.clientX,
           startY: e.clientY,
+          startLeft: state.selectBlock!.left,
+          startTop: state.selectBlock!.top,
           startPos: focusData.value.focus.map(({ top, left }) => ({ top, left })),  // 每个激活元素的top、left初始值
           dragging: false,
+          markLines: (() => {
+            const { focus, unFocus } = focusData.value;
+            const { top, left, width, height } = state.selectBlock!;
+
+            const lines: VisualEditorMarkLines = { x: [], y: [] };
+            unFocus.forEach(block => {
+              const { top: t, left: l, width: w, height: h } = block;
+              lines.y.push({ top: t, showTop: t });                                     // 顶部对其顶部
+              lines.y.push({ top: t + h, showTop: t + h });                             // 顶部对其底部
+              lines.y.push({ top: t + h / 2 - height / 2, showTop: t + h / 2 });        // 中间对其中间（垂直）
+              lines.y.push({ top: t - height, showTop: t });                            // 底部对其顶部
+              lines.y.push({ top: t + h - height, showTop: t + h });                    // 底部对其底部
+
+              lines.x.push({ left: l, showLeft: l });
+              lines.x.push({ left: l + w, showLeft: l + w });
+              lines.x.push({ left: l + w / 2 - width / 2, showLeft: l + w / 2 });
+              lines.x.push({ left: l - width, showLeft: l });
+              lines.x.push({ left: l + w - width, showLeft: l + w });
+            });
+
+            return lines;
+          })(),
         };
         document.addEventListener("mousemove", mousemove);
         document.addEventListener("mouseup", mouseup);
       };
 
       const mousemove = (e: MouseEvent) => {
-        let durX = e.clientX - dragState.startX;
-        let durY = e.clientY - dragState.startY;
         if (!dragState.dragging) {
           dragState.dragging = true;
           dragstart.emit();
         }
+        let { clientX: moveX, clientY: moveY } = e;
+        const { startX, startY } = dragState;
+
         // 移动过程中如果按住了 shift 键，则当前元素只能在原先的基础上单纯的左右或上下移动
         if (e.shiftKey) {
           // x和y轴，哪边的偏移量大，就修改哪边的位置
-          if (Math.abs(durX) > Math.abs(durY)) {
-            durY = 0;
+          if (Math.abs(moveX - startX) > Math.abs(moveY - startY)) {
+            moveX = startX;
           } else {
-            durX = 0;
+            moveY = startY;
           }
         }
+
+        const currentLeft = dragState.startLeft + moveX - startX;
+        const currentTop = dragState.startTop + moveY - startY;
+        const currentMark = {
+          x: null as null | number,
+          y: null as null | number,
+        };
+
+        for (let i = 0; i < dragState.markLines.y.length; i++) {
+          const { top, showTop } = dragState.markLines.y[i];
+          if (Math.abs(top - currentTop) < 5) {
+            moveY = top + startY - dragState.startTop;
+            currentMark.y = showTop;
+            break;
+          }
+        }
+        for (let i = 0; i < dragState.markLines.x.length; i++) {
+          const { left, showLeft } = dragState.markLines.x[i];
+          if (Math.abs(left - currentLeft) < 5) {
+            moveX = left + startX - dragState.startLeft;
+            currentMark.x = showLeft;
+            break;
+          }
+        }
+        mark.x = currentMark.x;
+        mark.y = currentMark.y;
+
+        const durX = moveX - startX;
+        const durY = moveY - startY;
         focusData.value.focus.forEach((block, index) => {
           block.top = dragState.startPos[index].top + durY;
           block.left = dragState.startPos[index].left + durX;
@@ -190,7 +258,7 @@ export default defineComponent({
         }
       };
 
-      return { mousedown };
+      return { mark, mousedown };
     })();
 
     const commander = useVisualCommand({
@@ -277,6 +345,15 @@ export default defineComponent({
                 />
               ))
             )}
+
+            {
+              blockDragger.mark.y !== null &&
+              <div class="visual-editor-mark-line-y" style={{ top: `${blockDragger.mark.y}px` }} />
+            }
+            {
+              blockDragger.mark.x !== null &&
+              <div class="visual-editor-mark-line-x" style={{ left: `${blockDragger.mark.x}px` }} />
+            }
           </div>
 
         </div>

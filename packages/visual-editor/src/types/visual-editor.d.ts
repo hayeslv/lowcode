@@ -6,6 +6,9 @@ export interface VisualEditorBlockData {
   adjustPosition?: boolean;         // 是否需要调整位置
   focus?: boolean;                  // 是否为选中状态
   zIndex: number;                   // z-index 值
+  width: number;                    // 组件宽度
+  height: number;                   // 组件高度
+  hasResize: boolean;               // 是否调整过宽高
 }
 
 // 传入editor的数据

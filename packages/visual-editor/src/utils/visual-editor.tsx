@@ -17,6 +17,11 @@ export function createVisualEditorConfig() {
 
 export type VisualEditorConfig = ReturnType<typeof createVisualEditorConfig>;
 
+export interface VisualEditorMarkLines {
+  x: { left: number; showLeft: number }[];
+  y: { top: number; showTop: number }[];
+}
+
 export function createNewBlock(
   {
     component,
@@ -35,5 +40,8 @@ export function createNewBlock(
     adjustPosition: true,
     focus: false,
     zIndex: 0,
+    width: 0,
+    height: 0,
+    hasResize: false,
   };
 }
