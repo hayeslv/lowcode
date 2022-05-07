@@ -5,7 +5,7 @@ import type { VisualEditorBlockData, VisualEditorComponent, VisualEditorModelVal
 import { useModel } from "./hooks/useModel";
 import { VisualEditorBlock } from "../visual-editor-block";
 import type { VisualEditorConfig, VisualEditorMarkLines } from "~/utils";
-import { $$dialog, useVisualCommand, createNewBlock } from "~/utils";
+import { DropdownOption, $$dropdown, $$dialog, useVisualCommand, createNewBlock } from "~/utils";
 import { createEvent } from "~/plugins/event";
 import { ElNotification } from "element-plus";
 
@@ -64,6 +64,19 @@ export default defineComponent({
       },
       updateBlocks: (blocks?: VisualEditorBlockData[]) => {
         dataModel.value = { ...dataModel.value, blocks };
+      },
+      showBlockData: (block: VisualEditorBlockData) => {
+        $$dialog.textarea(JSON.stringify(block), "节点数据", { editReadonly: true });
+      },
+      importBlockData: async(block: VisualEditorBlockData) => {
+        const text = await $$dialog.textarea("", "请输入节点JSON字符串");
+        try {
+          const data = JSON.parse(text || "");
+          commander.updateBlock(data, block);
+        } catch (error) {
+          console.error(error);
+          ElNotification({ title: "导入失败", message: "导入的数据格式不正常，请检查" });
+        }
       },
     };
     // 处理从菜单拖拽组件到容器的相关动作
@@ -261,6 +274,24 @@ export default defineComponent({
       return { mark, mousedown };
     })();
 
+    // 其他的一些事件处理
+    const handler = {
+      onContextmenuBlock: (e: MouseEvent, block: VisualEditorBlockData) => {
+        e.preventDefault();
+        e.stopPropagation();
+        $$dropdown({
+          reference: e,
+          content: () => <>
+            <DropdownOption label="置顶节点" icon="icon-place-top" {...{ onClick: commander.placeTop }} />
+            <DropdownOption label="置底节点" icon="icon-place-bottom" {...{ onClick: commander.placeBottom }} />
+            <DropdownOption label="删除节点" icon="icon-delete" {...{ onClick: commander.delete }} />
+            <DropdownOption label="查看数据" icon="icon-browse" {...{ onClick: () => methods.showBlockData(block) }} />
+            <DropdownOption label="导入节点" icon="icon-import" {...{ onClick: () => methods.importBlockData(block) }} />
+          </>,
+        });
+      },
+    };
+
     const commander = useVisualCommand({
       focusData,
       updateBlocks: methods.updateBlocks,
@@ -341,6 +372,7 @@ export default defineComponent({
                   key={index}
                   {...{
                     onMousedown: (e: MouseEvent) => focusHandler.block.onMousedown(e, block),
+                    onContextmenu: (e: MouseEvent) => handler.onContextmenuBlock(e, block),
                   }}
                 />
               ))
