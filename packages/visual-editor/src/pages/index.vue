@@ -5,35 +5,21 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref } from "vue";
+<script lang="ts">
+import { defineComponent, ref } from "vue";
 import VisualEditor from "~/components/visual-editor";
 import { VisualConfig } from "~/config";
+import jsonData from "~/data.json";
 
 const visualConfig = ref(VisualConfig);
-
-const jsonData = ref({
-  container: {
-    height: 500,
-    width: 800,
+export default defineComponent({
+  components: { VisualEditor },
+  data() {
+    return {
+      visualConfig,
+      jsonData,
+    };
   },
-  blocks: [
-    {
-      top: 200,
-      left: 100,
-      componentKey: "text",
-    },
-    {
-      top: 100,
-      left: 100,
-      componentKey: "button",
-    },
-    {
-      top: 200,
-      left: 200,
-      componentKey: "input",
-    },
-  ],
 });
 </script>
 

@@ -34,5 +34,6 @@ export function createNewBlock(
     componentKey: component!.key,
     adjustPosition: true,
     focus: false,
+    zIndex: 0,
   };
 }

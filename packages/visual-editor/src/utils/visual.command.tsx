@@ -11,7 +11,7 @@ export function useVisualCommand(
     dragend,
   }: {
     focusData: { value: { focus: VisualEditorBlockData[]; unFocus: VisualEditorBlockData[] } };
-    updateBlocks: (blocks: VisualEditorBlockData[]) => void;
+    updateBlocks: (blocks?: VisualEditorBlockData[]) => void;
     dataModel: { value: VisualEditorModelValue };
     dragstart: { on: (cb: () => void) => void; off: (cb: () => void) => void };
     dragend: { on: (cb: () => void) => void; off: (cb: () => void) => void };
@@ -28,7 +28,7 @@ export function useVisualCommand(
     execute: () => {
       // console.log("执行删除命令");
       const data = {
-        before: dataModel.value.blocks || [],
+        before: dataModel.value.blocks,
         after: focusData.value.unFocus,
       };
       return {
@@ -58,7 +58,7 @@ export function useVisualCommand(
         after: null as null | VisualEditorBlockData[],
       };
       const handler = {
-        dragstart: () => this.data.before = deepcopy(dataModel.value.blocks || []),
+        dragstart: () => this.data.before = deepcopy(dataModel.value.blocks),
         dragend: () => commander.state.commands.drag(),
       };
       dragstart.on(handler.dragstart);
@@ -71,7 +71,7 @@ export function useVisualCommand(
     },
     execute() {
       const before = this.data.before;
-      const after = deepcopy(dataModel.value.blocks || []);
+      const after = deepcopy(dataModel.value.blocks);
       return {
         redo: () => {
           updateBlocks(deepcopy(after));
@@ -90,8 +90,75 @@ export function useVisualCommand(
     name: "clear",
     execute: () => {
       const data = {
-        before: deepcopy(dataModel.value.blocks || []),
+        before: deepcopy(dataModel.value.blocks),
         after: deepcopy([]),
+      };
+      return {
+        redo: () => {
+          updateBlocks(deepcopy(data.after));
+        },
+        undo: () => {
+          updateBlocks(deepcopy(data.before));
+        },
+      };
+    },
+  });
+
+  /*
+   * 置顶命令
+   */
+  commander.registry({
+    name: "placeTop",
+    keyboard: "ctrl+up",
+    execute: () => {
+      const data = {
+        // 从现有的数据中复制一份出来
+        before: deepcopy(dataModel.value.blocks),
+        after: deepcopy((() => {
+          const { focus, unFocus } = focusData.value;
+          // 获取未选中元素中，最大的 z-index
+          const maxZIndex = unFocus.reduce(
+            (prev, block) => Math.max(prev, block.zIndex), -Infinity,
+          ) + 1;
+          focus.forEach(block => block.zIndex = maxZIndex);
+          return deepcopy(dataModel.value.blocks);
+        })()),
+      };
+      return {
+        redo: () => {
+          updateBlocks(deepcopy(data.after));
+        },
+        undo: () => {
+          updateBlocks(deepcopy(data.before));
+        },
+      };
+    },
+  });
+
+  /*
+   * 置底命令
+   */
+  commander.registry({
+    name: "placeBottom",
+    keyboard: "ctrl+down",
+    execute: () => {
+      const data = {
+        // 从现有的数据中复制一份出来
+        before: deepcopy(dataModel.value.blocks),
+        after: deepcopy((() => {
+          const { focus, unFocus } = focusData.value;
+          // 获取未选中元素中，最大的 z-index
+          let minZIndex = unFocus.reduce(
+            (prev, block) => Math.min(prev, block.zIndex), Infinity,
+          ) - 1;
+          if (minZIndex < 0) {
+            const dur = Math.abs(minZIndex);
+            unFocus.forEach(block => block.zIndex += dur);
+            minZIndex = 0;
+          }
+          focus.forEach(block => block.zIndex = minZIndex);
+          return deepcopy(dataModel.value.blocks);
+        })()),
       };
       return {
         redo: () => {
@@ -111,5 +178,7 @@ export function useVisualCommand(
     redo: () => commander.state.commands.redo(),
     delete: () => commander.state.commands.delete(),
     clear: () => commander.state.commands.clear(),
+    placeTop: () => commander.state.commands.placeTop(),
+    placeBottom: () => commander.state.commands.placeBottom(),
   };
 }
