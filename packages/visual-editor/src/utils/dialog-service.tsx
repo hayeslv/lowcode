@@ -9,11 +9,17 @@ enum DialogServiceEditType {
 }
 
 interface DialogServiceOption {
+  title?: string;
   editType: DialogServiceEditType;
   editReadonly?: boolean;
   editValue?: string | null;
   onConfirm: (val?: string | null) => void;
 }
+
+const keyGenerator = (() => {
+  let count = 0;
+  return () => `auto_key_${count++}`;
+})();
 
 const ServiceComponent = defineComponent({
   props: {
@@ -26,12 +32,14 @@ const ServiceComponent = defineComponent({
       option: props.option,
       editValue: null as null | undefined | string,
       showFlag: false,
+      key: keyGenerator(),
     });
 
     const methods = {
       service: (option: DialogServiceOption) => {
         state.option = option;
         state.editValue = option.editValue;
+        state.key = keyGenerator();
         methods.show();
       },
       show: () => {
@@ -53,7 +61,7 @@ const ServiceComponent = defineComponent({
     Object.assign(ctx.proxy, methods);
 
     return () =>
-      <ElDialog modelValue={state.showFlag}>
+      <ElDialog modelValue={state.showFlag} title={state.option.title} key={state.key}>
         {{
           default: () => <div>
             {
@@ -86,18 +94,32 @@ const DialogService = (() => {
 })();
 
 export const $$dialog = Object.assign(DialogService, {
-  input: (initValue?: string, option?: DialogServiceOption) => {
+  input: (initValue?: string, title?: string, option?: Omit<DialogServiceOption, "editType" | "onConfirm">) => {
     const dfd = defer<string | null | undefined>();
-    const opt: DialogServiceOption = option || { editType: DialogServiceEditType.input, onConfirm: dfd.resolve };
+    const opt: DialogServiceOption = {
+      ...option,
+      editType: DialogServiceEditType.input,
+      title,
+      editValue: initValue,
+      onConfirm: dfd.resolve,
+    };
     DialogService(opt);
 
     return dfd.promise;
   },
-  textarea: (initValue?: string, option?: DialogServiceOption) => {
+  textarea: (initValue?: string, title?: string, option?: Omit<DialogServiceOption, "editType" | "onConfirm">) => {
     const dfd = defer<string | null | undefined>();
-    const opt: DialogServiceOption = option || { editType: DialogServiceEditType.textarea, onConfirm: dfd.resolve };
+    const opt: DialogServiceOption = {
+      ...option,
+      editType: DialogServiceEditType.textarea,
+      title,
+      editValue: initValue,
+      onConfirm: dfd.resolve,
+    };
     DialogService(opt);
 
     return dfd.promise;
   },
 });
+
+// 05 - 22.10;

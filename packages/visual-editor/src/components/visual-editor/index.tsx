@@ -195,24 +195,27 @@ export default defineComponent({
     const buttons = [
       { label: "撤销", icon: "icon-back", handler: commander.undo, tip: "ctrl+z" },
       { label: "重做", icon: "icon-forward", handler: commander.redo, tip: "ctrl+y, ctrl+shift+z" },
-      { label: "删除", icon: "icon-delete", handler: () => commander.delete(), tip: "ctrl+d, backspace, delete" },
-      { label: "清空", icon: "icon-reset", handler: () => commander.clear() },
       {
         label: "导入",
         icon: "icon-import",
         handler: async() => {
-          const text = await $$dialog.input();
-          console.log(text);
-          // const text = await $dialog.textarea("", { title: "请输入导入的JSON数据" });
-          // if (!text) return;
-          // try {
-          //   const data = JSON.parse(text);
-          //   commander.updateModelValue(data);
-          // } catch (e) {
-          //   ElNotification({ title: "导入失败", message: "导入的数据格式不正常，请检查" });
-          // }
+          const text = await $$dialog.textarea("", "请输入导入的JSON字符串");
+          if (!text) return;
+          try {
+            const data = JSON.parse(text || "");
+            dataModel.value = data;
+          } catch (e) {
+            ElNotification({ title: "导入失败", message: "导入的数据格式不正常，请检查" });
+          }
         },
       },
+      {
+        label: "导出",
+        icon: "icon-export",
+        handler: () => $$dialog.textarea(JSON.stringify(dataModel.value), "导出的JSON数据", { editReadonly: true }),
+      },
+      { label: "删除", icon: "icon-delete", handler: () => commander.delete(), tip: "ctrl+d, backspace, delete" },
+      { label: "清空", icon: "icon-reset", handler: () => commander.clear() },
     ];
 
     return () => <div class="visual-editor">
