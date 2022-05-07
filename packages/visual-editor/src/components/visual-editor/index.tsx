@@ -266,6 +266,8 @@ export default defineComponent({
       const mouseup = () => {
         document.removeEventListener("mousemove", mousemove);
         document.removeEventListener("mouseup", mouseup);
+        mark.x = null;
+        mark.y = null;
         if (dragState.dragging === true) {
           dragend.emit();
         }
