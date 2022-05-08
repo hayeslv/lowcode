@@ -5,11 +5,12 @@ import type { VisualEditorBlockData, VisualEditorComponent, VisualEditorModelVal
 import { useModel } from "./hooks/useModel";
 import { VisualEditorBlock } from "../visual-editor-block";
 import type { VisualEditorConfig, VisualEditorMarkLines } from "~/utils";
-import { DropdownOption, $$dropdown, $$dialog, useVisualCommand, createNewBlock } from "~/utils";
+import { VisualEditorOperator, DropdownOption, $$dropdown, $$dialog, useVisualCommand, createNewBlock } from "~/utils";
 import { createEvent } from "~/plugins/event";
 import { ElNotification } from "element-plus";
 
 export default defineComponent({
+  components: { VisualEditorOperator },
   props: {
     modelValue: {
       type: Object as PropType<VisualEditorModelValue>,
@@ -45,7 +46,7 @@ export default defineComponent({
     });
 
     const state = reactive({
-      selectBlock: null as null | VisualEditorBlockData,    // 当前选中的组件
+      selectBlock: undefined as undefined | VisualEditorBlockData,    // 当前选中的组件
     });
 
     const dragstart = createEvent();
@@ -133,7 +134,7 @@ export default defineComponent({
             if (!e.shiftKey) {
               // 点击空白处，清空所有选中的bloack
               methods.clearFocus();
-              state.selectBlock = null;
+              state.selectBlock = undefined;
             }
           },
         },
@@ -356,9 +357,7 @@ export default defineComponent({
             </el-tooltip>;
         })}
       </div>
-      <div class="visual-editor-operator">
-      visual-editor-operator
-      </div>
+      <VisualEditorOperator block={state.selectBlock} config={props.config}></VisualEditorOperator>
       <div class="visual-editor-body">
         <div class="visual-editor-content">
           <div class="visual-editor-container"
