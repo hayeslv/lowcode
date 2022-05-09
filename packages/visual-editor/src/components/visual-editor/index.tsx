@@ -190,7 +190,7 @@ export default defineComponent({
             const { top, left, width, height } = state.selectBlock!;
 
             const lines: VisualEditorMarkLines = { x: [], y: [] };
-            unFocus.forEach(block => {
+            [...unFocus, { top: 0, left: 0, width: dataModel.value.container.width, height: dataModel.value.container.height }].forEach(block => {
               const { top: t, left: l, width: w, height: h } = block;
               lines.y.push({ top: t, showTop: t });                                     // 顶部对其顶部
               lines.y.push({ top: t + h, showTop: t + h });                             // 顶部对其底部
@@ -224,9 +224,9 @@ export default defineComponent({
         if (e.shiftKey) {
           // x和y轴，哪边的偏移量大，就修改哪边的位置
           if (Math.abs(moveX - startX) > Math.abs(moveY - startY)) {
-            moveX = startX;
-          } else {
             moveY = startY;
+          } else {
+            moveX = startX;
           }
         }
 
