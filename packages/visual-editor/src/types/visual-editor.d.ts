@@ -27,6 +27,6 @@ export interface VisualEditorComponent {
   key: string;
   label: string;
   preview: () => JSX.Element;
-  render: () => JSX.Element;
+  render: (data: { props: any }) => JSX.Element;
   props?: Record<string, VisualEditorProps>;
 }

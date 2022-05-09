@@ -45,8 +45,10 @@ export default defineComponent({
       };
     });
 
+    const selectIndex = ref(-1);
     const state = reactive({
-      selectBlock: undefined as undefined | VisualEditorBlockData,    // 当前选中的组件
+      // selectBlock: undefined as undefined | VisualEditorBlockData,    // 当前选中的组件
+      selectBlock: computed(() => (dataModel.value.blocks || [])[selectIndex.value]),
     });
 
     const dragstart = createEvent();
@@ -134,12 +136,12 @@ export default defineComponent({
             if (!e.shiftKey) {
               // 点击空白处，清空所有选中的bloack
               methods.clearFocus();
-              state.selectBlock = undefined;
+              selectIndex.value = -1;
             }
           },
         },
         block: {
-          onMousedown: (e: MouseEvent, block: VisualEditorBlockData) => {
+          onMousedown: (e: MouseEvent, block: VisualEditorBlockData, index: number) => {
             // 按住了 shift 键
             if (e.shiftKey) {
               // 如果此时没有选中的 block，就选中这个 block，否则让这个 block 的选中状态取反
@@ -155,7 +157,8 @@ export default defineComponent({
                 methods.clearFocus(block);
               }
             }
-            state.selectBlock = block;
+            // state.selectBlock = block;
+            selectIndex.value = index;
             blockDragger.mousedown(e);
           },
         },
@@ -378,7 +381,7 @@ export default defineComponent({
                   block={block}
                   key={index}
                   {...{
-                    onMousedown: (e: MouseEvent) => focusHandler.block.onMousedown(e, block),
+                    onMousedown: (e: MouseEvent) => focusHandler.block.onMousedown(e, block, index),
                     onContextmenu: (e: MouseEvent) => handler.onContextmenuBlock(e, block),
                   }}
                 />

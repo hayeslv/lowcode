@@ -1,4 +1,5 @@
 import type { VisualEditorBlockData, VisualEditorComponent } from "~/types";
+import type { VisualEditorProps } from "./visual-editor.props";
 
 export function createVisualEditorConfig() {
   const componentList: VisualEditorComponent[] = [];
@@ -7,7 +8,12 @@ export function createVisualEditorConfig() {
   return {
     componentList,
     componentMap,
-    registry: (key: string, component: Omit<VisualEditorComponent, "key">) => {
+    registry: <Props extends Record<string, VisualEditorProps> = {}>(key: string, component: {
+      label: string;
+      preview: () => JSX.Element;
+      render: (data: { props: { [k in keyof Props]: any } }) => JSX.Element;
+      props?: Props;
+    }) => {
       const comp = { ...component, key };
       componentList.push(comp);
       componentMap[key] = comp;
