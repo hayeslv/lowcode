@@ -1,5 +1,5 @@
 import deepcopy from "deepcopy";
-import { ElColorPicker, ElForm, ElFormItem, ElInput, ElInputNumber, ElOption, ElSelect } from "element-plus";
+import { ElButton, ElColorPicker, ElForm, ElFormItem, ElInput, ElInputNumber, ElOption, ElSelect } from "element-plus";
 import type { PropType } from "vue";
 import { watch, reactive, defineComponent } from "vue";
 import type { VisualEditorBlockData, VisualEditorModelValue } from "~/types";
@@ -12,20 +12,42 @@ export const VisualEditorOperator = defineComponent({
     block: { type: Object as PropType<VisualEditorBlockData> },
     config: { type: Object as PropType<VisualEditorConfig>, required: true },
     dataModel: { type: Object as PropType<{ value: VisualEditorModelValue }>, required: true },
+    updateBlock: { type: Function as PropType<(newBlock: VisualEditorBlockData, oldBlock: VisualEditorBlockData) => void>, required: true },
+    updateModelValue: { type: Function as PropType<(val: VisualEditorModelValue) => void>, required: true },
   },
   setup(props) {
     const state = reactive({
       editData: {} as any,
     });
+    const methods = {
+      apply: () => {
+        if (!props.block) {
+          // 当前编辑容器属性
+          props.updateModelValue({
+            ...props.dataModel.value,
+            container: state.editData,
+          });
+        } else {
+          // 当前编辑block数据的属性
+          props.updateBlock({
+            ...props.block,
+            props: state.editData,
+          }, props.block);
+        }
+      },
+      reset: () => {
+        if (!props.block) {
+          // 如果当前没有选中block，那么就让用户编辑容器的属性
+          state.editData = deepcopy(props.dataModel.value.container);
+        } else {
+          // 否则编辑选中组件（block）的属性
+          state.editData = deepcopy(props.block.props || {});
+        }
+      },
+    };
 
-    watch(() => props.block, (val) => {
-      if (!val) {
-        // 如果val不存在，说明当前没有选中block，那么就让用户编辑容器的属性
-        state.editData = deepcopy(props.dataModel.value.container);
-      } else {
-        // 否则编辑选中组件（block）的属性
-        state.editData = deepcopy(val.props || {});
-      }
+    watch(() => props.block, () => {
+      methods.reset();
     }, { immediate: true });
 
     const renderEditor = (propName: string, propConfig: VisualEditorProps) => {
@@ -46,10 +68,10 @@ export const VisualEditorOperator = defineComponent({
       if (!props.block) {
         content = <>
           <ElFormItem label="容器宽度">
-            <ElInputNumber v-model={state.editData.width} />
+            <ElInputNumber v-model={state.editData.width} step={100} />
           </ElFormItem>
           <ElFormItem label="容器高度">
-            <ElInputNumber v-model={state.editData.height} />
+            <ElInputNumber v-model={state.editData.height} step={100} />
           </ElFormItem>
         </>;
       } else {
@@ -72,6 +94,10 @@ export const VisualEditorOperator = defineComponent({
         <div class="visual-editor-operator">
           <ElForm labelPosition="top">
             {content}
+            <ElFormItem>
+              <ElButton type="primary" {...{ onClick: methods.apply }}>应用</ElButton>
+              <ElButton {...{ onClick: methods.reset }}>重置</ElButton>
+            </ElFormItem>
           </ElForm>
         </div>
       );

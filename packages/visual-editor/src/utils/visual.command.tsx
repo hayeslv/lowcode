@@ -197,6 +197,24 @@ export function useVisualCommand(
     },
   });
 
+  commander.registry({
+    name: "updateModelValue",
+    execute: (val: VisualEditorModelValue) => {
+      const data = {
+        before: deepcopy(dataModel.value),
+        after: deepcopy(val),
+      };
+      return {
+        redo: () => {
+          dataModel.value = data.after;
+        },
+        undo: () => {
+          dataModel.value = data.before;
+        },
+      };
+    },
+  });
+
   commander.init();
 
   return {
@@ -207,5 +225,6 @@ export function useVisualCommand(
     placeTop: () => commander.state.commands.placeTop(),
     placeBottom: () => commander.state.commands.placeBottom(),
     updateBlock: (newBlock: VisualEditorBlockData, oldBlock: VisualEditorBlockData) => commander.state.commands.updateBlock(newBlock, oldBlock),
+    updateModelValue: (val: VisualEditorModelValue) => commander.state.commands.updateModelValue(val),
   };
 }
