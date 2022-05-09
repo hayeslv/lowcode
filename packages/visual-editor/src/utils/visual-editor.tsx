@@ -43,5 +43,6 @@ export function createNewBlock(
     width: 0,
     height: 0,
     hasResize: false,
+    props: {},
   };
 }

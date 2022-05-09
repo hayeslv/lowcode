@@ -357,7 +357,7 @@ export default defineComponent({
             </el-tooltip>;
         })}
       </div>
-      <VisualEditorOperator block={state.selectBlock} config={props.config}></VisualEditorOperator>
+      <VisualEditorOperator block={state.selectBlock} config={props.config} dataModel={dataModel}></VisualEditorOperator>
       <div class="visual-editor-body">
         <div class="visual-editor-content">
           <div class="visual-editor-container"

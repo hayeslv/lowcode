@@ -11,6 +11,7 @@ export interface VisualEditorBlockData {
   width: number;                    // 组件宽度
   height: number;                   // 组件高度
   hasResize: boolean;               // 是否调整过宽高
+  props: Record<string, any>;       // 组件的设计属性
 }
 
 // 传入editor的数据
