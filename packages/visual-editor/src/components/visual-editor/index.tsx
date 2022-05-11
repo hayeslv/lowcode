@@ -12,14 +12,9 @@ import { ElNotification } from "element-plus";
 export default defineComponent({
   components: { VisualEditorOperator },
   props: {
-    modelValue: {
-      type: Object as PropType<VisualEditorModelValue>,
-      required: true,
-    },
-    config: {
-      type: Object as PropType<VisualEditorConfig>,
-      required: true,
-    },
+    modelValue: { type: Object as PropType<VisualEditorModelValue>, required: true },
+    config: { type: Object as PropType<VisualEditorConfig>, required: true },
+    formData: { type: Object as PropType<Record<string, any>>, required: true },
   },
   emits: {
     "update:modelValue": (val?: VisualEditorModelValue) => true,
@@ -49,7 +44,7 @@ export default defineComponent({
     const state = reactive({
       // selectBlock: undefined as undefined | VisualEditorBlockData,    // 当前选中的组件
       selectBlock: computed(() => (dataModel.value.blocks || [])[selectIndex.value]),
-      editing: false,
+      editing: true,
     });
 
     const classes = computed(() => [
@@ -321,8 +316,8 @@ export default defineComponent({
       { label: "撤销", icon: "icon-back", handler: commander.undo, tip: "ctrl+z" },
       { label: "重做", icon: "icon-forward", handler: commander.redo, tip: "ctrl+y, ctrl+shift+z" },
       {
-        label: () => state.editing ? "编辑" : "预览",
-        icon: () => state.editing ? "icon-edit" : "icon-browse",
+        label: () => !state.editing ? "编辑" : "预览",
+        icon: () => !state.editing ? "icon-edit" : "icon-browse",
         handler: () => {
           if (!state.editing) methods.clearFocus();
           state.editing = !state.editing;
@@ -401,6 +396,7 @@ export default defineComponent({
                   config={props.config}
                   block={block}
                   key={index}
+                  formData={props.formData}
                   {...{
                     onMousedown: (e: MouseEvent) => focusHandler.block.onMousedown(e, block, index),
                     onContextmenu: (e: MouseEvent) => handler.onContextmenuBlock(e, block),

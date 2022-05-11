@@ -8,11 +8,24 @@ export function createVisualEditorConfig() {
   return {
     componentList,
     componentMap,
-    registry: <Props extends Record<string, VisualEditorProps> = {}>(key: string, component: {
+    registry: <
+      Props extends Record<string, VisualEditorProps> = {},
+      Model extends Record<string, string> = {},
+    >(key: string, component: {
       label: string;
       preview: () => JSX.Element;
-      render: (data: { props: { [k in keyof Props]: any } }) => JSX.Element;
+      render: (data: {
+        props: { [k in keyof Props]: any };
+        model: Partial<{
+          //! [k in keyof Model]: any
+          [k in keyof Model]: {
+            value: any;
+            onChange: (val: any) => void;
+          }
+        }>;
+      }) => JSX.Element;
       props?: Props;
+      model?: Model;
     }) => {
       const comp = { ...component, key };
       componentList.push(comp);
@@ -50,5 +63,6 @@ export function createNewBlock(
     height: 0,
     hasResize: false,
     props: {},
+    model: {},
   };
 }

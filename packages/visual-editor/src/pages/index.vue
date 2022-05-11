@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>这是个页面内容</h1>
-    <VisualEditor v-model="jsonData" :config="visualConfig" />
+    <VisualEditor v-model="jsonData" :config="visualConfig" :form-data="formData" />
   </div>
 </template>
 
@@ -18,6 +18,9 @@ export default defineComponent({
     return {
       visualConfig,
       jsonData,
+      formData: {
+        username: "admin",
+      },
     };
   },
 });
