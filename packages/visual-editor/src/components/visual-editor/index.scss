@@ -153,17 +153,6 @@
 
         .visual-editor-block {
           position: absolute;
-          cursor: move;
-
-          &:after {
-            $space: -3px;
-            position: absolute;
-            top: $space;
-            bottom: $space;
-            left: $space;
-            right: $space;
-            content: "";
-          }
 
           &.visual-editor-block-focus {
             &::after {
@@ -184,6 +173,27 @@
           top: 0;
           bottom: 0;
           border-left: 1px dashed $primary;
+        }
+      }
+    }
+  }
+
+  &.visual-editor-editing {
+    & > .visual-editor-body {
+      .visual-editor-content {
+        border: 1px dashed $primary;
+        box-sizing: border-box;
+
+        .visual-editor-block{
+          &:after {
+            $space: -3px;
+            position: absolute;
+            top: $space;
+            bottom: $space;
+            left: $space;
+            right: $space;
+            content: "";
+          }
         }
       }
     }

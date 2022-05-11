@@ -49,7 +49,15 @@ export default defineComponent({
     const state = reactive({
       // selectBlock: undefined as undefined | VisualEditorBlockData,    // 当前选中的组件
       selectBlock: computed(() => (dataModel.value.blocks || [])[selectIndex.value]),
+      editing: false,
     });
+
+    const classes = computed(() => [
+      "visual-editor",
+      {
+        "visual-editor-editing": state.editing,
+      },
+    ]);
 
     const dragstart = createEvent();
     const dragend = createEvent();
@@ -129,6 +137,7 @@ export default defineComponent({
       return {
         container: {
           onMousedown: (e: MouseEvent) => {
+            if (!state.editing) return;
             e.preventDefault();
             // 只处理容器的事件
             if (e.currentTarget !== e.target) return;
@@ -142,6 +151,7 @@ export default defineComponent({
         },
         block: {
           onMousedown: (e: MouseEvent, block: VisualEditorBlockData, index: number) => {
+            if (!state.editing) return;
             // 按住了 shift 键
             if (e.shiftKey) {
               // 如果此时没有选中的 block，就选中这个 block，否则让这个 block 的选中状态取反
@@ -283,6 +293,7 @@ export default defineComponent({
     // 其他的一些事件处理
     const handler = {
       onContextmenuBlock: (e: MouseEvent, block: VisualEditorBlockData) => {
+        if (!state.editing) return;
         e.preventDefault();
         e.stopPropagation();
         $$dropdown({
@@ -310,6 +321,14 @@ export default defineComponent({
       { label: "撤销", icon: "icon-back", handler: commander.undo, tip: "ctrl+z" },
       { label: "重做", icon: "icon-forward", handler: commander.redo, tip: "ctrl+y, ctrl+shift+z" },
       {
+        label: () => state.editing ? "编辑" : "预览",
+        icon: () => state.editing ? "icon-edit" : "icon-browse",
+        handler: () => {
+          if (!state.editing) methods.clearFocus();
+          state.editing = !state.editing;
+        },
+      },
+      {
         label: "导入",
         icon: "icon-import",
         handler: async() => {
@@ -334,7 +353,7 @@ export default defineComponent({
       { label: "清空", icon: "icon-reset", handler: () => commander.clear() },
     ];
 
-    return () => <div class="visual-editor">
+    return () => <div class={classes.value}>
       <div class="visual-editor-menu">
         {props.config.componentList.map(component => (
           <div class="visual-editor-menu-item"
@@ -349,9 +368,11 @@ export default defineComponent({
       </div>
       <div class="visual-editor-head">
         {buttons.map((btn, index) => {
+          const label = typeof btn.label === "function" ? btn.label() : btn.label;
+          const icon = typeof btn.icon === "function" ? btn.icon() : btn.icon;
           const content = <div key={index} onClick={btn.handler} class="visual-editor-head-button">
-            <i class={`iconfont ${btn.icon}`}></i>
-            <span>{btn.label}</span>
+            <i class={`iconfont ${icon}`}></i>
+            <span>{label}</span>
           </div>;
           return !btn.tip
             ? content
