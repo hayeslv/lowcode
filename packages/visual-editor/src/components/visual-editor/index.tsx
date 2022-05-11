@@ -45,6 +45,7 @@ export default defineComponent({
       // selectBlock: undefined as undefined | VisualEditorBlockData,    // 当前选中的组件
       selectBlock: computed(() => (dataModel.value.blocks || [])[selectIndex.value]),
       preview: true,  // 当前是否正在预览
+      editing: true,  // 当前是否已经开启了编辑器
     });
 
     const classes = computed(() => [
@@ -59,6 +60,7 @@ export default defineComponent({
 
     // 对外暴露的一些方法
     const methods = {
+      openEdit: () => state.editing = true,
       clearFocus: (block?: VisualEditorBlockData) => {
         let blocks = dataModel.value.blocks || [];
         if (blocks.length === 0) return;
@@ -346,6 +348,14 @@ export default defineComponent({
       { label: "置底", icon: "icon-place-bottom", handler: () => commander.placeBottom(), tip: "ctrl+down" },
       { label: "删除", icon: "icon-delete", handler: () => commander.delete(), tip: "ctrl+d, backspace, delete" },
       { label: "清空", icon: "icon-reset", handler: () => commander.clear() },
+      {
+        label: "关闭",
+        icon: "icon-close",
+        handler: () => {
+          methods.clearFocus();
+          state.editing = false;
+        },
+      },
     ];
 
     return () => <>
@@ -360,9 +370,13 @@ export default defineComponent({
             />
           ))
         )}
+        <div class="visual-container-edit-button" onClick={methods.openEdit}>
+          <i class="iconfont icon-edit" />
+          <span>编辑组件</span>
+        </div>
       </div>
 
-      <div class={classes.value}>
+      <div class={classes.value} v-show={state.editing}>
         <div class="visual-editor-menu">
           {props.config.componentList.map(component => (
             <div class="visual-editor-menu-item"

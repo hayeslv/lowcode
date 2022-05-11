@@ -144,37 +144,6 @@
       height: 100%;
       width: 100%;
       overflow-y: auto;
-
-      & > .visual-editor-container{
-        position: relative;
-        background-color: #fff;
-        flex-shrink: 0;
-        flex-grow: 0;
-
-        .visual-editor-block {
-          position: absolute;
-
-          &.visual-editor-block-focus {
-            &::after {
-              border: 1px dashed $primary;
-            }
-
-          }
-        }
-
-        .visual-editor-mark-line-y{
-          position: absolute;
-          left: 0;
-          right: 0;
-          border-top: 1px dashed $primary;
-        }
-        .visual-editor-mark-line-x{
-          position: absolute;
-          top: 0;
-          bottom: 0;
-          border-left: 1px dashed $primary;
-        }
-      }
     }
   }
 
@@ -197,5 +166,52 @@
         }
       }
     }
+  }
+}
+
+.visual-editor-container{
+  position: relative;
+  background-color: #fff;
+  flex-shrink: 0;
+  flex-grow: 0;
+
+  .visual-editor-block {
+    position: absolute;
+
+    &.visual-editor-block-focus {
+      &::after {
+        border: 1px dashed $primary;
+      }
+
+    }
+  }
+
+  .visual-editor-mark-line-y{
+    position: absolute;
+    left: 0;
+    right: 0;
+    border-top: 1px dashed $primary;
+  }
+  .visual-editor-mark-line-x{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    border-left: 1px dashed $primary;
+  }
+}
+
+.visual-container-edit-button {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  border: 2px solid $ibc;
+  color: $itc;
+  padding: 5px 12px;
+  cursor: pointer;
+  .iconfont {
+    color: $icc;
+  }
+  &:hover{
+    background-color: #f2f2f2;
   }
 }

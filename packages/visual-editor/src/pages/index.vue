@@ -1,7 +1,8 @@
 <template>
-  <div>
+  <div class="page">
     <h1>这是个页面内容</h1>
     <VisualEditor v-model="jsonData" :config="visualConfig" :form-data="formData" />
+    <div style="text-align: center;">{{ JSON.stringify(formData) }}</div>
   </div>
 </template>
 
@@ -27,4 +28,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+.page{
+  padding-bottom: 300px;
+}
 </style>
