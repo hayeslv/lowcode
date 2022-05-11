@@ -12,5 +12,3 @@ app.use(router);
 app.use(ElementPlus);
 
 app.mount("#app");
-
-// TODO 第7：1.52

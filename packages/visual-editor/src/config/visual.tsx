@@ -47,10 +47,14 @@ VisualConfig.registry("select", {
     ))}
   </ElSelect>,
   props: {
-    options: createEditorTableProp("下拉选项", [
-      { label: "显示值", field: "label" },
-      { label: "绑定值", field: "value" },
-    ]),
+    options: createEditorTableProp("下拉选项", {
+      options: [
+        { label: "显示值", field: "label" },
+        { label: "绑定值", field: "value" },
+        { label: "备注", field: "comments" },
+      ],
+      showKey: "label",
+    }),
   },
 });
 VisualConfig.registry("input", {

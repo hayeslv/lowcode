@@ -12,7 +12,7 @@ export type VisualEditorProps = {
 } & {
   options?: VisualEditorSelectOptions;
 } & {
-  table?: VisualEditorTableOptions;
+  table?: VisualEditorTableOption;
 };
 
 /* ---------------------------------------- input ---------------------------------------- */
@@ -42,15 +42,18 @@ export function createEditorSelectProp(label: string, options: VisualEditorSelec
   };
 }
 /* ---------------------------------------- table ---------------------------------------- */
-export type VisualEditorTableOptions = {
-  label: string;    // 列显示文本
-  field: string;    // 列绑定的字段
-}[];
+export interface VisualEditorTableOption {
+  options: {
+    label: string;    // 列显示文本
+    field: string;    // 列绑定的字段
+  }[];
+  showKey: string;
+}
 
-export function createEditorTableProp(label: string, table: VisualEditorTableOptions): VisualEditorProps {
+export function createEditorTableProp(label: string, option: VisualEditorTableOption): VisualEditorProps {
   return {
     type: VisualEditorPropsType.table,
     label,
-    table,
+    table: option,
   };
 }
