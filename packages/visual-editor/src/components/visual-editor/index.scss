@@ -178,7 +178,7 @@
     }
   }
 
-  &.visual-editor-editing {
+  &.visual-editor-not-preview {
     & > .visual-editor-body {
       .visual-editor-content {
         border: 1px dashed $primary;
