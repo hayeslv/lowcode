@@ -44,7 +44,7 @@ export default defineComponent({
     const state = reactive({
       // selectBlock: undefined as undefined | VisualEditorBlockData,    // 当前选中的组件
       selectBlock: computed(() => (dataModel.value.blocks || [])[selectIndex.value]),
-      preview: true,  // 当前是否正在预览
+      preview: false,  // 当前是否正在预览
       editing: true,  // 当前是否已经开启了编辑器
     });
 
