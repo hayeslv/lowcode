@@ -1,0 +1,15 @@
+.number-range{
+  display: inline-flex;
+  align-items: stretch;
+  width: 225px;
+  min-height: 40px;
+  input {
+    flex: 1;
+    border: 1px solid #eee;
+  }
+  span{
+    margin: 0 8px;
+    display: inline-flex;
+    align-items: center;
+  }
+}
