@@ -1,6 +1,6 @@
 import "./index.scss";
 import type { PropType } from "vue";
-import { reactive, ref, computed, defineComponent } from "vue";
+import { withCtx, reactive, ref, computed, defineComponent } from "vue";
 import type { VisualEditorBlockData, VisualEditorComponent, VisualEditorModelValue } from "~/types/visual-editor";
 import { useModel } from "./hooks/useModel";
 import { VisualEditorBlock } from "../visual-editor-block";
@@ -19,7 +19,7 @@ export default defineComponent({
   emits: {
     "update:modelValue": (val?: VisualEditorModelValue) => true,
   },
-  setup(props, { emit }) {
+  setup(props, { emit, slots }) {
     // 双向绑定至容器中的组件数据
     const dataModel = useModel(() => props.modelValue, val => emit("update:modelValue", val));
     // container节点dom对象的引用
@@ -367,6 +367,7 @@ export default defineComponent({
               block={block}
               key={index}
               formData={props.formData}
+              slots={slots}
             />
           ))
         )}
@@ -425,6 +426,7 @@ export default defineComponent({
                     block={block}
                     key={index}
                     formData={props.formData}
+                    slots={slots}
                     {...{
                       onMousedown: (e: MouseEvent) => focusHandler.block.onMousedown(e, block, index),
                       onContextmenu: (e: MouseEvent) => handler.onContextmenuBlock(e, block),
