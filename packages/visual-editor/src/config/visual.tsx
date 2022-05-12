@@ -124,7 +124,10 @@ VisualConfig.registry("image", {
   render: ({ props, size }) => {
     return (
       <div style={{ height: `${size.height || 100}px`, width: `${size.width || 100}px` }} class="visual-block-image">
-        <img src={props.url || "https://cn.vuejs.org/images/logo.png"} />
+        <img
+          style="object-fit: fill; display: block; width: 100%; height: 100%"
+          src={props.url || "https://cn.vuejs.org/images/logo.png"}
+        />
       </div>
     );
   },
