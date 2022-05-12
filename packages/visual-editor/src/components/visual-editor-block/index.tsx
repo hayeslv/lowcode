@@ -2,6 +2,7 @@ import type { PropType } from "vue";
 import { onMounted, ref, computed, defineComponent } from "vue";
 import type { VisualEditorBlockData } from "~/types/visual-editor";
 import type { VisualEditorConfig } from "~/utils";
+import { BlockResize } from "../block-resize";
 
 export const VisualEditorBlock = defineComponent({
   props: {
@@ -42,6 +43,12 @@ export const VisualEditorBlock = defineComponent({
       const component = props.config.componentMap[props.block.componentKey];
       const formData = props.formData as Record<string, any>;
       const Render = component.render({
+        size: props.block.hasResize
+          ? {
+            width: props.block.width,
+            height: props.block.height,
+          }
+          : {},
         props: props.block.props || {},
         model: Object.keys(component.model || {}).reduce((prev, propName) => {
           const modelName = !props.block.model ? null : props.block.model[propName];
@@ -52,9 +59,15 @@ export const VisualEditorBlock = defineComponent({
           return prev;
         }, {} as Record<string, any>),
       });
+
+      const { width, height } = component.resize || {};
+
       return (
         <div class={classes.value} style={styles.value} ref={el}>
           { Render }
+          {!!props.block.focus &&  (!!width || !!height) &&
+            <BlockResize block={props.block} component={component} />
+          }
         </div>
       );
     };

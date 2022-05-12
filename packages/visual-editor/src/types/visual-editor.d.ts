@@ -28,7 +28,12 @@ export interface VisualEditorComponent {
   key: string;
   label: string;
   preview: () => JSX.Element;
-  render: (data: { props: any; model: any }) => JSX.Element;
+  render: (data: {
+    props: any;
+    model: any;
+    size: { width?: number; height?: number };
+  }) => JSX.Element;
   props?: Record<string, VisualEditorProps>;
   model?: Record<string, string>;
+  resize?: { width?: boolean; height?: boolean };
 }

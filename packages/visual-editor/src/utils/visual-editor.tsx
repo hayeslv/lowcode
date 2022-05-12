@@ -23,9 +23,11 @@ export function createVisualEditorConfig() {
             onChange: (val: any) => void;
           }
         }>;
+        size: { width?: number; height?: number };
       }) => JSX.Element;
       props?: Props;
       model?: Model;
+      resize?: { width?: boolean; height?: boolean };
     }) => {
       const comp = { ...component, key };
       componentList.push(comp);
