@@ -16,9 +16,9 @@ export const NumberRange = defineComponent({
     const endModel = useModel(() => props.end, val => emit("update:end", val));
 
     return () => <div class="number-range">
-      <input type="text" v-model={startModel.value} />
+      <div><input type="text" v-model={startModel.value} /></div>
       <span>~</span>
-      <input type="text" v-model={endModel.value} />
+      <div><input type="text" v-model={endModel.value} /></div>
     </div>;
   },
 });

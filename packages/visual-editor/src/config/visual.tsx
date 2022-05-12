@@ -1,7 +1,6 @@
 import { ElButton, ElInput, ElOption, ElSelect } from "element-plus";
 import { NumberRange } from "~/components/number-range";
 import { createEditorColorProp, createEditorInputProp, createEditorSelectProp, createEditorTableProp, createVisualEditorConfig } from "~/utils";
-import "./visual.scss";
 
 export const VisualConfig = createVisualEditorConfig();
 
@@ -75,7 +74,7 @@ VisualConfig.registry("input", {
 
 VisualConfig.registry("number-range", {
   label: "数字范围输入框",
-  preview: () => <NumberRange style={{ width: "100%" }} />,
+  preview: () => <NumberRange />,
   render: ({ model }) =>  <NumberRange
     {...{
       start: model.start?.value,
