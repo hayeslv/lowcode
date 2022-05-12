@@ -77,7 +77,7 @@ VisualConfig.registry("input", {
     width: true,
   },
   preview: () => <ElInput />,
-  render: ({ model, size }) => <ElInput {...model.default} style={{ height: `${size.width}px` }} />,
+  render: ({ model, size }) => <ElInput {...model.default} style={{ width: `${size.width}px` }} />,
   model: {
     default: "绑定字段",
   },
@@ -90,7 +90,7 @@ VisualConfig.registry("number-range", {
   },
   preview: () => <NumberRange />,
   render: ({ model, size }) =>  <NumberRange
-    style={{ height: `${size.width}px` }}
+    style={{ width: `${size.width}px` }}
     {...{
       start: model.start?.value,
       "onUpdate:start": model.start?.onChange,

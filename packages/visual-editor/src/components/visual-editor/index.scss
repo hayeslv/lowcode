@@ -156,6 +156,9 @@
         box-sizing: border-box;
 
         .visual-editor-block{
+          .el-button, .el-input {
+            transition: none;
+          }
           &:after {
             $space: -3px;
             position: absolute;
