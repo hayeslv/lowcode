@@ -215,6 +215,22 @@ export function useVisualCommand(
     },
   });
 
+  /*
+   * 全选命令
+   */
+  commander.registry({
+    name: "selectAll",
+    followQueue: false,
+    keyboard: "ctrl+a",
+    execute: () => {
+      return {
+        redo: () => {
+          (dataModel.value.blocks || []).forEach(block => block.focus = true);
+        },
+      };
+    },
+  });
+
   commander.init();
 
   return {
