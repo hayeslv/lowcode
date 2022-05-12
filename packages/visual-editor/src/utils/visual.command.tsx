@@ -70,7 +70,7 @@ export function useVisualCommand(
       };
     },
     execute() {
-      const before = this.data.before;
+      const before = deepcopy(this.data.before);
       const after = deepcopy(dataModel.value.blocks);
       return {
         redo: () => {

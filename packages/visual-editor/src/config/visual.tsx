@@ -28,8 +28,8 @@ VisualConfig.registry("button", {
       type={props.type}
       size={props.size}
       style={{
-        width: `${size.width}px`,
-        height: `${size.height}px`,
+        width: size.width ? `${size.width}px` : null,
+        height: size.height ? `${size.height}px` : null,
       }}>
       {props.text || "按钮"}
     </ElButton>
@@ -87,7 +87,7 @@ VisualConfig.registry("input", {
   render: ({ model, size, custom }) => <ElInput
     {...custom}
     {...model.default}
-    style={{ width: `${size.width}px` }}
+    style={{ width: size.width ? `${size.width}px` : null }}
   />,
   model: {
     default: "绑定字段",
@@ -101,7 +101,7 @@ VisualConfig.registry("number-range", {
   },
   preview: () => <NumberRange />,
   render: ({ model, size }) =>  <NumberRange
-    style={{ width: `${size.width}px` }}
+    style={{ width: size.width ? `${size.width}px` : null }}
     {...{
       start: model.start?.value,
       "onUpdate:start": model.start?.onChange,

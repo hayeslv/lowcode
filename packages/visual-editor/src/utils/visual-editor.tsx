@@ -1,3 +1,4 @@
+import { inject, provide } from "vue";
 import type { VisualEditorBlockData, VisualEditorComponent } from "~/types";
 import type { VisualEditorProps } from "./visual-editor.props";
 
@@ -69,3 +70,28 @@ export function createNewBlock(
     model: {},
   };
 }
+
+export interface VisualDragEvent {
+  dragstart: {
+    on: (cb: () => void) => void;
+    off: (cb: () => void) => void;
+    emit: () => void;
+  };
+  dragend: {
+    on: (cb: () => void) => void;
+    off: (cb: () => void) => void;
+    emit: () => void;
+  };
+}
+
+export const VisualDragProvider = (() => {
+  const VISUAL_DRAG_PROVIDER = "@@VISUAL_DRAG_PROVIDER";
+  return {
+    provide: (data: VisualDragEvent) => {
+      provide(VISUAL_DRAG_PROVIDER, data);
+    },
+    inject: () => {
+      return inject(VISUAL_DRAG_PROVIDER) as VisualDragEvent;
+    },
+  };
+})();

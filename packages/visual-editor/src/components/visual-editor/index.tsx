@@ -1,11 +1,11 @@
 import "./index.scss";
 import type { PropType } from "vue";
-import { withCtx, reactive, ref, computed, defineComponent } from "vue";
+import { reactive, ref, computed, defineComponent } from "vue";
 import type { VisualEditorBlockData, VisualEditorComponent, VisualEditorModelValue } from "~/types/visual-editor";
 import { useModel } from "./hooks/useModel";
 import { VisualEditorBlock } from "../visual-editor-block";
 import type { VisualEditorConfig, VisualEditorMarkLines } from "~/utils";
-import { VisualEditorOperator, DropdownOption, $$dropdown, $$dialog, useVisualCommand, createNewBlock } from "~/utils";
+import { VisualDragProvider, VisualEditorOperator, DropdownOption, $$dropdown, $$dialog, useVisualCommand, createNewBlock } from "~/utils";
 import { createEvent } from "~/plugins/event";
 import { ElNotification } from "element-plus";
 
@@ -58,6 +58,8 @@ export default defineComponent({
 
     const dragstart = createEvent();
     const dragend = createEvent();
+
+    VisualDragProvider.provide({ dragstart, dragend });
 
     // 对外暴露的一些方法
     const methods = {

@@ -1,6 +1,7 @@
 import type { PropType } from "vue";
 import { defineComponent } from "vue";
 import type { VisualEditorBlockData, VisualEditorComponent } from "~/types";
+import { VisualDragProvider } from "~/utils";
 import "./index.scss";
 
 enum Direction {
@@ -15,6 +16,8 @@ export const BlockResize = defineComponent({
     component: { type: Object as PropType<VisualEditorComponent>, required: true },
   },
   setup(props) {
+    const { dragstart, dragend } = VisualDragProvider.inject();
+
     const onMousedown = (() => {
       let data = {
         startX: 0,
@@ -23,6 +26,7 @@ export const BlockResize = defineComponent({
         startHeight: 0,
         startLeft: 0,
         startTop: 0,
+        dragging: false,
         direction: { horizontal: Direction.start, vertical: Direction.start },
       };
 
@@ -38,13 +42,18 @@ export const BlockResize = defineComponent({
           startHeight: props.block.height,
           startLeft: props.block.left,
           startTop: props.block.top,
+          dragging: false,
           direction,
         };
       };
 
       const mousemove = (e: MouseEvent) => {
-        const { startX, startY, startWidth, startHeight, startLeft, startTop, direction } = data;
+        const { startX, startY, startWidth, startHeight, startLeft, startTop, direction, dragging } = data;
         let { clientX: moveX, clientY: moveY } = e;
+        if (!dragging) {
+          data.dragging = true;
+          dragstart.emit();
+        }
 
         if (direction.horizontal === Direction.center) {
           // 拖拽的是水平中间（高度不能被修改）
@@ -79,6 +88,9 @@ export const BlockResize = defineComponent({
       const mouseup = () => {
         document.body.removeEventListener("mousemove", mousemove);
         document.body.removeEventListener("mouseup", mouseup);
+        if (data.dragging) {
+          dragend.emit();
+        }
       };
 
       return mousedown;
