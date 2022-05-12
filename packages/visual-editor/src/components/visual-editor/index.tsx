@@ -15,6 +15,7 @@ export default defineComponent({
     modelValue: { type: Object as PropType<VisualEditorModelValue>, required: true },
     config: { type: Object as PropType<VisualEditorConfig>, required: true },
     formData: { type: Object as PropType<Record<string, any>>, required: true },
+    customProps: { type: Object as PropType<Record<string, any>> },
   },
   emits: {
     "update:modelValue": (val?: VisualEditorModelValue) => true,
@@ -368,6 +369,7 @@ export default defineComponent({
               key={index}
               formData={props.formData}
               slots={slots}
+              customProps={props.customProps}
             />
           ))
         )}
@@ -427,6 +429,7 @@ export default defineComponent({
                     key={index}
                     formData={props.formData}
                     slots={slots}
+                    customProps={props.customProps}
                     {...{
                       onMousedown: (e: MouseEvent) => focusHandler.block.onMousedown(e, block, index),
                       onContextmenu: (e: MouseEvent) => handler.onContextmenuBlock(e, block),

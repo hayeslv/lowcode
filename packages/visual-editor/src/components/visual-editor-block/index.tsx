@@ -10,6 +10,7 @@ export const VisualEditorBlock = defineComponent({
     config: { type: Object as PropType<VisualEditorConfig>, required: true },
     formData: { type: Object as PropType<Record<string, any>>, required: true },
     slots: { type: Object as PropType<Record<string, Slot | undefined>>, required: true },
+    customProps: { type: Object as PropType<Record<string, any>> },
   },
   setup(props) {
     const el = ref({} as HTMLDivElement);
@@ -63,6 +64,9 @@ export const VisualEditorBlock = defineComponent({
             };
             return prev;
           }, {} as Record<string, any>),
+          custom: (!props.block.slotName || !props.customProps)
+            ? {}
+            : (props.customProps[props.block.slotName]) || {},
         });
       }
 

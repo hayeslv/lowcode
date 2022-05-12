@@ -24,6 +24,7 @@ export function createVisualEditorConfig() {
           }
         }>;
         size: { width?: number; height?: number };
+        custom: Record<string, any>;
       }) => JSX.Element;
       props?: Props;
       model?: Model;
